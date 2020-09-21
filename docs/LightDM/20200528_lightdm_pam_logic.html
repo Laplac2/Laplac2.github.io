@@ -1,0 +1,1208 @@
+<!DOCTYPE html><html><head>
+      <title>20200528_lightdm_pam_logic</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <style>
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}
+
+/* highlight */
+pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+pre[data-line] .line-highlight-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+}
+
+pre[data-line] .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+pre[data-line] .line-highlight:before, 
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview  ">
+      <ol>
+<h1><li>&#x91CD;&#x8981;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;</li></h1>
+<ol>
+<li>
+<h4><code>DisplayManager</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>display-manager.h</code></h4>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>DisplayManagerPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>DisplayManager</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>DisplayManagerPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>display-manager.c</code></h2>
+<ol>
+<li><code>seats</code>&#x6210;&#x5458;&#xFF0C;<code>GList</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x767B;&#x5F55;&#x7684;&#x7528;&#x6237;&#x4F1A;&#x8BDD;&#x5217;&#x8868;</li>
+<li><code>stopping</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;&#x6307;&#x793A;&#x662F;&#x5426;&#x6B63;&#x5728;&#x505C;&#x6B62;&#x4F1A;&#x8BDD;</li>
+<li><code>stopped</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;&#x6307;&#x793A;&#x4F1A;&#x8BDD;&#x662F;&#x5426;&#x5DF2;&#x505C;&#x6B62;</li>
+</ol>
+</li>
+<li>
+<h2><code>DisplayManagerService</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>display-manager-service.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>DisplayManagerServicePrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>DisplayManagerService</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>DisplayManagerServicePrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>display-manager-service.c</code></h2>
+<ol>
+<li><code>manager</code>&#x6210;&#x5458;&#xFF0C;<code>DisplayManager*</code>&#x7C7B;&#x578B;&#xFF0C;&#x5728;D-Bus&#x4E0A;&#x66B4;&#x9732;&#x7684;DisplayManager&#x670D;&#x52A1;</li>
+<li><code>bus</code>&#x6210;&#x5458;&#xFF0C;<code>GDBusConnection*</code>&#x7C7B;&#x578B;&#xFF0C;Bus connected to</li>
+<li><code>bus_id</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;Handle for D-Bus name</li>
+<li><code>reg_id</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;Handle for display manager D-Bus object</li>
+<li><code>seat_info</code>&#x6210;&#x5458;&#xFF0C;<code>GDBusNodeInfo *</code>&#x7C7B;&#x578B;&#xFF0C;D-Bus interface information</li>
+<li><code>session_info</code>&#x6210;&#x5458;&#xFF0C;<code>GDBusNodeInfo *</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>seat_index</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;Next index to use for seat / session entries</li>
+<li><code>session_index</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;&#x4F1A;&#x8BDD;&#x7D22;&#x5F15;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x52A0;&#x5230;Seat&#x5B57;&#x7B26;&#x4E32;&#x540E;&#x9762;&#x7684;&#x6570;&#x5B57;</li>
+<li><code>seat_bus_entries</code>&#x6210;&#x5458;&#xFF0C;<code>GHashTable*</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x4E0E;D-Bus&#x670D;&#x52A1;&#x7684;&#x6620;&#x5C04;&#xFF0C;Bus entries for seats / session</li>
+<li><code>session_bus_entries</code>&#x6210;&#x5458;&#xFF0C;<code>GHashTable *</code>&#x7C7B;&#x578B;&#xFF0C;&#x4F1A;&#x8BDD;&#x4E0E;D-Bus&#x670D;&#x52A1;&#x7684;&#x6620;&#x5C04;</li>
+</ol>
+</li>
+<li>
+<h2><code>SharedDataManager</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>shared-data-manager.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>SharedDataManagerPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>SharedDataManager</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>SharedDataManagerPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>shared-data-manager.c</code></h2>
+<ol>
+<li><code>greeter_user</code>&#x6210;&#x5458;&#xFF0C;<code>gchar*</code>&#x7C7B;&#x578B;&#xFF0C;&#x767B;&#x5F55;&#x7528;&#x6237;&#x540D;</li>
+<li><code>greeter_gid</code>&#x6210;&#x5458;&#xFF0C;<code>guint32</code>&#x7C7B;&#x578B;&#xFF0C;&#x767B;&#x5F55;&#x7528;&#x6237;&#x7EC4;ID</li>
+<li><code>starting_dirs</code>, <code>GHashTable *</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+</ol>
+</li>
+<li>
+<h2><code>Login1Service</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>login1.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>SharedDataManagerPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>SharedDataManager</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>Login1ServicePrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>login1.c</code></h2>
+<ol>
+<li><code>connection</code>&#x6210;&#x5458;&#xFF0C;<code>GDBusConnection *</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x4E8E;&#x8BBF;&#x95EE;<code>org.freedesktop.login1</code>&#x670D;&#x52A1;&#xFF0C;Connection to bus service is running on</li>
+<li><code>connected</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C; &#x6307;&#x793A;<code>connection</code>&#x662F;&#x5426;&#x5DF2;&#x7ECF;&#x8FDE;&#x63A5;</li>
+<li><code>seats</code>&#xFF0C; <code>GList*</code>&#x7C7B;&#x578B;&#xFF0C; &#x5F53;&#x524D;&#x673A;&#x5668;&#x4E0A;&#x7684;&#x7528;&#x6237;&#x5E2D;&#x4F4D;&#x5217;&#x8868;&#xFF0C;&#x4E0E;&#x7528;&#x6237;&#x4E00;&#x4E00;&#x5BF9;&#x5E94;&#xFF0C;Seats the service is reporting</li>
+<li><code>signal_id</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C; &#x6307;&#x793A;&#x76D1;&#x542C;&#x7684;&#x4FE1;&#x53F7;&#xFF0C; Handle to signal subscription</li>
+</ol>
+</li>
+<li>
+<h2><code>User</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>accounts.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>UserPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>User</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>UserPrivate</code>&#x7ED3;&#x4F53;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>accounts.c</code></h2>
+<ol>
+<li><code>common_user</code>&#x6210;&#x5458;&#xFF0C;<code>CommonUser*</code>&#x7C7B;&#x578B;&#xFF0C;&#x5185;&#x90E8;&#x7528;&#x6237;&#x6570;&#x636E;&#x7ED3;&#x6784;</li>
+</ol>
+</li>
+<li>
+<h2><code>CommonUser</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>user-list.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+</ol>
+</li>
+<li>
+<h2><code>CommonUserPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>user-list.c</code></h2>
+<ol>
+<li><code>loaded_dmrc</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;&#x6307;&#x793A;&#x662F;&#x5426;&#x52A0;&#x8F7D;&#x4E86;DMRC&#x6587;&#x4EF6;&#xFF0C;TRUE if have loaded the DMRC file</li>
+<li><code>bus</code>&#x6210;&#x5458;&#xFF0C;<code>GDBusConnection*</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x4E8E;&#x8FDE;&#x63A5;&#x7528;&#x6237;&#x5E10;&#x53F7;&#x670D;&#x52A1;&#x5E76;&#x76D1;&#x542C;&#x5BF9;&#x65B9;&#x53D1;&#x51FA;&#x7684;&#x4FE1;&#x53F7;&#xFF0C;Bus we are listening for accounts service on</li>
+<li><code>path</code>&#x6210;&#x5458;&#xFF0C;<code>gchar*</code>&#x7C7B;&#x578B;&#xFF0C;&#x5E10;&#x53F7;&#x670D;&#x52A1;&#x8DEF;&#x5F84;&#xFF0C;Accounts service path</li>
+<li><code>changed_signal</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;&#x5E10;&#x53F7;&#x670D;&#x52A1;&#x7684;&#x4FE1;&#x53F7;&#xFF0C;Update signal from accounts service</li>
+<li><code>name</code>&#x6210;&#x5458;&#xFF0C;<code>gchar*</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x540D;&#xFF0C;Username</li>
+<li><code>real_name</code>&#x6210;&#x5458;&#xFF0C;<code>gchar*</code>&#x7C7B;&#x578B;&#xFF0C;&#x771F;&#x5B9E;&#x540D;&#x5B57;&#xFF0C;&#x7528;&#x4E8E;&#x5C55;&#x793A;&#xFF0C;&#x53EF;&#x4EE5;&#x662F;&#x4E2D;&#x6587;&#xFF0C;Descriptive name for user</li>
+<li><code>home_directory</code>&#x6210;&#x5458;&#xFF0C;<code>gchar*</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x7684;&#x4E3B;&#x76EE;&#x5F55;&#xFF0C;&#x5305;&#x542B;&#x6587;&#x6863;&#x3001;&#x97F3;&#x4E50;&#x3001;&#x56FE;&#x50CF;&#x7B49;&#x7B49;&#x6587;&#x4EF6;&#x5939;&#x3002;Home directory of user</li>
+<li><code>shell</code>&#x6210;&#x5458;&#xFF0C;<code>gchar*</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x767B;&#x5F55;&#x65F6;&#x8FD0;&#x884C;&#x7684;shell&#x7A0B;&#x5E8F;&#xFF0C;Shell for user</li>
+<li><code>image</code>&#x6210;&#x5458;&#xFF0C;<code>gchar*</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x5934;&#x50CF;&#x7684;&#x8DEF;&#x5F84;&#xFF0C;Image for user</li>
+<li><code>background</code>&#x6210;&#x5458;&#xFF0C;<code>gchar*</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x767B;&#x5F55;&#x65F6;&#x754C;&#x9762;&#x80CC;&#x666F;&#x56FE;&#x7247;&#x8DEF;&#x5F84;&#xFF0C;Background image for users</li>
+<li><code>has_messages</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;&#x662F;&#x5426;&#x5B58;&#x5728;&#x53EF;&#x7528;&#x7684;&#x6D88;&#x606F;&#xFF0C;&#x901A;&#x5E38;&#x662F;&#x5176;&#x5B83;&#x7528;&#x6237;&#x53D1;&#x7ED9;&#x8FD9;&#x4E2A;&#x7528;&#x6237;&#x7684;&#x6D88;&#x606F;&#xFF0C;TRUE if this user has messages available</li>
+<li><code>uid</code>&#x6210;&#x5458;&#xFF0C;<code>guint64</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x7684;UNIX&#x552F;&#x4E00;&#x6807;&#x8BC6;&#xFF0C;UID of user</li>
+<li><code>gid</code>&#x6210;&#x5458;&#xFF0C;<code>guint64</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x76F4;&#x63A5;&#x96B6;&#x5C5E;&#x7684;&#x7EC4;&#x7684;UNIX&#x552F;&#x4E00;&#x6807;&#x8BC6;&#xFF0C;GID of user</li>
+<li><code>language</code>&#x6210;&#x5458;&#xFF0C;<code>gchar*</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x9009;&#x62E9;&#x7684;&#x8BED;&#x8A00;&#xFF0C;ser chosen language</li>
+<li><code>layouts</code>&#x6210;&#x5458;&#xFF0C;<code>gchar**</code>&#x7C7B;&#x578B;&#xFF0C;User layout preferences</li>
+<li><code>session</code>&#x6210;&#x5458;&#xFF0C;<code>gchar*</code>&#x7C7B;&#x578B;&#xFF0C;&#x9ED8;&#x8BA4;&#x7684;&#x7528;&#x6237;&#x4F1A;&#x8BDD;&#x540D;&#x79F0;&#xFF0C;User default session</li>
+</ol>
+</li>
+<li>
+<h2><code>CommonUserListPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>user-list.c</code></h2>
+<ol>
+<li><code>bus</code> &#xFF0C;<code>GDBusConnection*</code>&#x7C7B;&#x578B;&#xFF0C;Bus connection being communicated on</li>
+<li><code>user_added_signal</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;&#x65B0;&#x589E;&#x7528;&#x6237;&#x4FE1;&#x53F7;</li>
+<li><code>user_removed_signal</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;&#x5220;&#x9664;&#x7528;&#x6237;&#x4FE1;&#x53F7;</li>
+<li><code>session_added_signal</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x767B;&#x5F55;&#x4FE1;&#x53F7;</li>
+<li><code>session_removed_signal</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;&#x7528;&#x6237;&#x6CE8;&#x9500;&#x4FE1;&#x53F7;&#xFF0C;&#x5305;&#x62EC;&#x88AB;&#x7BA1;&#x7406;&#x5458;&#x8E22;&#x51FA;</li>
+<li><code>passwd_monitor</code>&#x6210;&#x5458;&#xFF0C;<code>GFileMonitor *</code>&#x7C7B;&#x578B;&#xFF0C;&#x76D1;&#x63A7;&#x7528;&#x6237;&#x5BC6;&#x7801;&#x6587;&#x4EF6;&#xFF0C;&#x76D1;&#x542C;&#x7528;&#x6237;&#x5BC6;&#x7801;&#x53D8;&#x66F4;&#x3002;</li>
+<li><code>have_users</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;&#x5F53;&#x524D;&#x7528;&#x6237;&#x5217;&#x8868;&#x662F;&#x5426;&#x5B58;&#x5728;&#x7528;&#x6237;</li>
+<li><code>users</code>&#x6210;&#x5458;&#xFF0C;<code>GList *</code>&#x7C7B;&#x578B;&#xFF0C;&#x6240;&#x6709;&#x7528;&#x6237;&#x5217;&#x8868;</li>
+<li><code>sessions</code>&#x6210;&#x5458;&#xFF0C;<code>GList *</code>&#x7C7B;&#x578B;&#xFF0C;&#x6240;&#x6709;&#x767B;&#x5F55;&#x7684;&#x7528;&#x6237;&#x5217;&#x8868;</li>
+</ol>
+</li>
+<li>
+<h2><code>Login1Seat</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>login1.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>Login1SeatPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>Login1Seat</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>Login1SeatPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>login1.c</code></h2>
+<ol>
+<li><code>connection</code>&#x6210;&#x5458;&#xFF0C;<code>GDBusConnection *</code>&#x7C7B;&#x578B;&#xFF0C;&#x7EF4;&#x62A4;&#x5BF9;&#x5916;&#x63D0;&#x4F9B;D-Bus&#x7684;&#x670D;&#x52A1;&#x7684;&#x8FDE;&#x63A5;&#xFF0C;Connection to bus seat is running on</li>
+<li><code>id</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;LightDM&#x7BA1;&#x7406;&#x7684;&#x7528;&#x6237;&#x5E2D;&#x4F4D;&#x6807;&#x8BC6;&#xFF0C;Seat Id</li>
+<li><code>path</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;&#x5BF9;&#x5916;&#x63D0;&#x4F9B;D-Bus&#x670D;&#x52A1;&#x7684;&#x8DEF;&#x5F84;&#xFF0C;D-Bus path for this seat</li>
+<li><code>signal_id</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;Handle to signal subscription</li>
+<li><code>can_graphical</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if can run a graphical display on this seat</li>
+<li><code>can_multi_session</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if can do session switching</li>
+</ol>
+</li>
+<li>
+<h2><code>Session</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>session.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>SessionPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>Session</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>SessionPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>session.c</code></h2>
+<ol>
+<li><code>config</code>&#x6210;&#x5458;&#xFF0C;<code>SessionConfig</code>&#x7C7B;&#x578B;&#xFF0C;Configuration for this session</li>
+<li><code>display_server</code>&#x6210;&#x5458;&#xFF0C;<code>DisplayServer</code>&#x7C7B;&#x578B;&#xFF0C;Display server running on</li>
+<li><code>pid</code>&#x6210;&#x5458;&#xFF0C;<code>GPid</code>&#x7C7B;&#x578B;&#xFF0C;PID of child process</li>
+<li><code>to_child_input</code>&#x6210;&#x5458;&#xFF0C;<code>int</code>&#x7C7B;&#x578B;&#xFF0C;Pipes to talk to child</li>
+<li><code>from_child_output</code>&#x6210;&#x5458;&#xFF0C;<code>int</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>from_child_channel</code>&#x6210;&#x5458;&#xFF0C;<code>GIOChannel *</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>from_child_watch</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>child_watch</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>username</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;User to authenticate as</li>
+<li><code>is_guest</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if is a guest account</li>
+<li><code>user</code>&#x6210;&#x5458;&#xFF0C;<code>User</code>&#x7C7B;&#x578B;&#xFF0C;User object that matches the current username</li>
+<li><code>pam_service</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;PAM service to use</li>
+<li><code>do_authenticate</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if should run PAM authentication phase</li>
+<li><code>is_interactive</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if can handle PAM prompts</li>
+<li><code>messages_length</code>&#x6210;&#x5458;&#xFF0C;<code>int</code>&#x7C7B;&#x578B;&#xFF0C;Messages being requested by PAM</li>
+<li><code>messages</code>&#x6210;&#x5458;&#xFF0C;<code>struct pam_message *</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>authentication_started</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;Authentication result from PAM</li>
+<li><code>authentication_complete</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>authentication_result</code>&#x6210;&#x5458;&#xFF0C;<code>int</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>authentication_result_string</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>log_filename</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;File to log to</li>
+<li><code>log_mode</code>&#x6210;&#x5458;&#xFF0C;<code>LogMode</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>tty</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;tty this session is running on</li>
+<li><code>xdisplay</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;X display connected to</li>
+<li><code>x_authority</code>&#x6210;&#x5458;&#xFF0C;<code>XAuthority *</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>x_authority_use_system_location</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>greeter_socket</code>&#x6210;&#x5458;&#xFF0C;<code>GreeterSocket *</code>&#x7C7B;&#x578B;&#xFF0C;Socket to allow greeters to connect to (if allowed)</li>
+<li><code>remote_host_name</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;Remote host this session is being controlled from</li>
+<li><code>console_kit_cookie</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;Console kit cookie</li>
+<li><code>login1_session_id</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;login1 session ID</li>
+<li><code>env</code>&#x6210;&#x5458;&#xFF0C;<code>GList *</code>&#x7C7B;&#x578B;&#xFF0C;Environment to set in child</li>
+<li><code>argv</code>&#x6210;&#x5458;&#xFF0C;<code>gchar **</code>&#x7C7B;&#x578B;&#xFF0C;Command to run in child</li>
+<li><code>command_run</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;True if have run command</li>
+<li><code>stopping</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if stopping this session</li>
+</ol>
+</li>
+<li>
+<h2><code>SessionConfig</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>session-config.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>SessionConfigPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>SessionConfig</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>SessionConfigPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>session-config.c</code></h2>
+<ol>
+<li><code>session_type</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;Session type</li>
+<li><code>desktop_names</code>&#x6210;&#x5458;&#xFF0C;<code>gchar **</code>&#x7C7B;&#x578B;&#xFF0C;&#x684C;&#x9762;&#x73AF;&#x5883;&#x5217;&#x8868;&#xFF0C;&#x6BD4;&#x5982;XFCE&#x3001;LCDE&#x7B49;&#x7B49;&#x3002;Desktop names</li>
+<li><code>command</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;&#x76EE;&#x6807;greeter&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x8DEF;&#x5F84;&#x4EE5;&#x53CA;&#x53C2;&#x6570;&#x3002;Command to run</li>
+<li><code>allow_greeter</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if can run a greeter inside the session</li>
+</ol>
+</li>
+<li>
+<h2><code>DisplayServer</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>display-server.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>DisplayServerPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>DisplayServer</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>DisplayServerPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>display-server.c</code></h2>
+<ol>
+<li><code>is_ready</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE when started</li>
+<li><code>stopping</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE when being stopped</li>
+<li><code>stopped</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE when the display server has stopped</li>
+</ol>
+</li>
+<li>
+<h2><code>XAuthority</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>x-authority.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>XAuthorityPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>XAuthority</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>XAuthorityPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>x-authority.c</code></h2>
+<ol>
+<li><code>family</code>&#x6210;&#x5458;&#xFF0C;<code>guint16</code>&#x7C7B;&#x578B;&#xFF0C;Protocol family</li>
+<li><code>address</code>&#x6210;&#x5458;&#xFF0C;<code>guint8 *</code>&#x7C7B;&#x578B;&#xFF0C;Address of the X server (format dependent on family)</li>
+<li><code>address_length</code>&#x6210;&#x5458;&#xFF0C;<code>gsize</code>&#x7C7B;&#x578B;&#xFF0C;&#x6307;&#x793A;<code>address</code>&#x7684;&#x957F;&#x5EA6;</li>
+<li><code>number</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;Display number of X server</li>
+<li><code>authorization_name</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;Authorization scheme</li>
+<li><code>authorization_data</code>&#x6210;&#x5458;&#xFF0C;<code>guint8 *</code>&#x7C7B;&#x578B;&#xFF0C;Authorization data</li>
+<li><code>authorization_data_length</code>&#x6210;&#x5458;&#xFF0C;<code>gsize</code>&#x7C7B;&#x578B;&#xFF0C;&#x6307;&#x793A;<code>authorization_data</code>&#x7684;&#x957F;&#x5EA6;</li>
+</ol>
+</li>
+<li>
+<h2><code>Greeter</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>greeter.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>GreeterPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>Greeter</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>GreeterPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>greeter.c</code></h2>
+<ol>
+<li><code>pam_service</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;PAM service to authenticate with</li>
+<li><code>autologin_pam_service</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>read_buffer</code>&#x6210;&#x5458;&#xFF0C;<code>guint8 *</code>&#x7C7B;&#x578B;&#xFF0C;Buffer for data read from greeter</li>
+<li><code>n_read</code>&#x6210;&#x5458;&#xFF0C;<code>gsize</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>use_secure_memory</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>hints</code>&#x6210;&#x5458;&#xFF0C;<code>GHashTable *</code>&#x7C7B;&#x578B;&#xFF0C;Hints for the greeter</li>
+<li><code>default_session</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;Default session to use</li>
+<li><code>authentication_sequence_number</code>&#x6210;&#x5458;&#xFF0C;<code>guint32</code>&#x7C7B;&#x578B;&#xFF0C;Sequence number of current PAM session</li>
+<li><code>remote_session</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;Remote session name</li>
+<li><code>active_username</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;Currently selected user</li>
+<li><code>authentication_session</code>&#x6210;&#x5458;&#xFF0C;<code>Session*</code>&#x7C7B;&#x578B;&#xFF0C;PAM session being constructed by the greeter</li>
+<li><code>api_version</code>&#x6210;&#x5458;&#xFF0C;<code>guint32</code>&#x7C7B;&#x578B;&#xFF0C;API version the client can speak</li>
+<li><code>resettable</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if a the greeter can handle a reset; else we will just kill it instead</li>
+<li><code>start_session</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if a user has been authenticated and the session requested to start</li>
+<li><code>allow_guest</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if can log into guest accounts</li>
+<li><code>guest_account_authenticated</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if logging into guest session</li>
+<li><code>to_greeter_input</code>&#x6210;&#x5458;&#xFF0C;<code>int</code>&#x7C7B;&#x578B;&#xFF0C;Communication channels to communicate with</li>
+<li><code>from_greeter_output</code>&#x6210;&#x5458;&#xFF0C;<code>int</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>to_greeter_channel</code>&#x6210;&#x5458;&#xFF0C;<code>GIOChannel *</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>from_greeter_channel</code>&#x6210;&#x5458;&#xFF0C;<code>GIOChannel *</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+<li><code>from_greeter_watch</code>&#x6210;&#x5458;&#xFF0C;<code>guint</code>&#x7C7B;&#x578B;&#xFF0C;</li>
+</ol>
+</li>
+<li>
+<h2><code>GreeterClass</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>greeter.h</code></h2>
+<ol>
+<li><code>parent_class</code>&#x6210;&#x5458;&#xFF0C;<code>GObjectClass</code>&#x7C7B;&#x578B;</li>
+<li><code>connected</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Greeter *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>disconnected</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Greeter *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>create_session</code>&#x6210;&#x5458;&#xFF0C;<code>Session * (*)(Greeter *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>start_session</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean (*)(Greeter *, SessionType, const gchar *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+</ol>
+</li>
+<li>
+<h2><code>SessionClass</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>session.h</code></h2>
+<ol>
+<li><code>parent_class</code>&#x6210;&#x5458;&#xFF0C;<code>GObjectClass</code>&#x7C7B;&#x578B;</li>
+<li><code>start</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean (*)(Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>run</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>stop</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>create_greeter</code>&#x6210;&#x5458;&#xFF0C;<code>Greeter *(*)(Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>got_messages</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>authentication_complete</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Session *session)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>stopped</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Session *session)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+</ol>
+</li>
+<li>
+<h2><code>SeatClass</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>seat.h</code></h2>
+<ol>
+<li><code>parent_class</code>&#x6210;&#x5458;&#xFF0C;<code>GObjectClass</code>&#x7C7B;&#x578B;</li>
+<li><code>setup</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Seat *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>start</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean (*)(Seat *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>create_display_server</code>&#x6210;&#x5458;&#xFF0C;<code>DisplayServer *(*) (Seat *, Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>display_server_is_used</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean (*) (Seat *, DisplayServer *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>create_greeter_session</code>&#x6210;&#x5458;&#xFF0C;<code>GreeterSession *(*) (Seat *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>create_session</code>&#x6210;&#x5458;&#xFF0C;<code>Session *(*) (Seat *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>set_active_session</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Seat *, Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>set_next_session</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Seat *, Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>get_active_session</code>&#x6210;&#x5458;&#xFF0C;<code>Session *(*)(Seat *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>run_script</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Seat *, DisplayServer *, Process *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>stop</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Seat *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>session_added</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Seat *, Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>running_user_session</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Seat *, Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>session_removed</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Seat *, Session *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+<li><code>stopped</code>&#x6210;&#x5458;&#xFF0C;<code>void (*)(Seat *)</code>&#x7C7B;&#x578B;&#xFF0C;&#x51FD;&#x6570;&#x6307;&#x9488;</li>
+</ol>
+</li>
+<li>
+<h2><code>Seat</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>seat.h</code></h2>
+<ol>
+<li><code>parent_instance</code>&#x6210;&#x5458;&#xFF0C;<code>GObject</code>&#x7C7B;&#x578B;&#xFF0C;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;</li>
+<li><code>priv</code>&#x6210;&#x5458;&#xFF0C;<code>SeatPrivate*</code>&#x7C7B;&#x578B;&#xFF0C;<code>Seat</code>&#x7684;&#x5C01;&#x88C5;&#xFF0C;&#x4FDD;&#x62A4;&#x79C1;&#x6709;&#x6570;&#x636E;</li>
+</ol>
+</li>
+<li>
+<h2><code>SeatPrivate</code>&#x7ED3;&#x6784;&#x4F53;&#x7C7B;&#x578B;&#xFF0C;&#x4F4D;&#x4E8E;<code>seat.c</code></h2>
+<ol>
+<li><code>name</code>&#x6210;&#x5458;&#xFF0C;<code>gchar *</code>&#x7C7B;&#x578B;&#xFF0C;XDG name for this seat</li>
+<li><code>properties</code>&#x6210;&#x5458;&#xFF0C;<code>GHashTable *</code>&#x7C7B;&#x578B;&#xFF0C;Configuration for this seat</li>
+<li><code>supports_multi_session</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if this seat can run multiple sessions at once</li>
+<li><code>share_display_server</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if display server can be shared for sessions</li>
+<li><code>display_servers</code>&#x6210;&#x5458;&#xFF0C;<code>GList *</code>&#x7C7B;&#x578B;&#xFF0C;The display servers on this seat</li>
+<li><code>sessions</code>&#x6210;&#x5458;&#xFF0C;<code>GList *</code>&#x7C7B;&#x578B;&#xFF0C;The sessions on this seat</li>
+<li><code>active_session</code>&#x6210;&#x5458;&#xFF0C;<code>Session *</code>&#x7C7B;&#x578B;&#xFF0C;The last session set to active</li>
+<li><code>next_session</code>&#x6210;&#x5458;&#xFF0C;<code>Session *</code>&#x7C7B;&#x578B;&#xFF0C;The session belonging to the active greeter user</li>
+<li><code>session_to_activate</code>&#x6210;&#x5458;&#xFF0C;<code>Session *</code>&#x7C7B;&#x578B;&#xFF0C;The session to set active when it starts</li>
+<li><code>started</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE once we have started</li>
+<li><code>stopping</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if stopping this seat (waiting for displays to stop)</li>
+<li><code>stopped</code>&#x6210;&#x5458;&#xFF0C;<code>gboolean</code>&#x7C7B;&#x578B;&#xFF0C;TRUE if stopped</li>
+<li><code>replacement_greeter</code>&#x6210;&#x5458;&#xFF0C;<code>GreeterSession *</code>&#x7C7B;&#x578B;&#xFF0C;The greeter to be started to replace the current one</li>
+</ol>
+</li>
+</ol>
+<h1><li> LightDM&#x542F;&#x52A8;&#x8FC7;&#x7A0B;&#x4E2D;&#x4E0E;&#x7528;&#x6237;&#x7BA1;&#x7406;&#x6709;&#x5173;&#x7684;&#x521D;&#x59CB;&#x5316;</li></h1>
+<ol>
+<li>&#x8BFB;&#x53D6;&#x914D;&#x7F6E;<code>/etc/lightdm/lightdm.conf</code>&#x5E76;&#x521D;&#x59CB;&#x5316;<code>lightdm.conf</code>&#x6CA1;&#x6709;&#x8D4B;&#x503C;&#x7684;&#x914D;&#x7F6E;&#x8282;&#x3002;&#x8FD9;&#x91CC;&#x91CD;&#x70B9;&#x5173;&#x6CE8;&#x4E0E;&#x767B;&#x5F55;&#x6709;&#x5173;&#x7684;&#x914D;&#x7F6E;
+<ol>
+<li><code>start-default-seat</code>&#x9ED8;&#x8BA4;&#x503C;<code>true</code></li>
+<li><code>greeter-user</code>&#x9ED8;&#x8BA4;&#x503C;<code>lightdm</code></li>
+<li><code>sessions-directory</code>&#x9ED8;&#x8BA4;&#x503C;<code>/usr/share/lightdm/sessions:/usr/share/xsessions:/usr/share/wayland-sessions</code></li>
+<li><code>remote-sessions-directory</code>&#x9ED8;&#x8BA4;&#x503C;<code>/usr/share/lightdm/remote-sessions</code></li>
+<li><code>greeters-directory</code>&#x9ED8;&#x8BA4;&#x503C;<code>$XDG_DATA_DIRS/lightdm/greeters:$XDG_DATA_DIRS/xgreeters</code></li>
+<li><code>pam-service</code>&#x9ED8;&#x8BA4;&#x503C;<code>lightdm</code></li>
+<li><code>pam-autologin-service</code>&#x9ED8;&#x8BA4;&#x503C;<code>lightdm-autologin</code></li>
+<li><code>pam-greeter-service</code>&#x9ED8;&#x8BA4;&#x503C;<code>lightdm-greeter</code>&#x3002;</li>
+<li><code>dbus-service</code>&#x9ED8;&#x8BA4;&#x503C;<code>true</code></li>
+</ol>
+</li>
+<li><code>display_manager_new</code>&#x51FD;&#x6570;&#x521D;&#x59CB;&#x5316;<code>display_manager</code>&#xFF0C;&#x6B64;&#x51FD;&#x6570;&#x7684;&#x4E3B;&#x8981;&#x4F5C;&#x7528;&#x662F;&#x5728;C&#x5F00;&#x53D1;&#x73AF;&#x5883;&#x6A21;&#x62DF;&#x5355;&#x4F8B;&#x6A21;&#x5F0F;</li>
+<li><code>display_manager_stopped_cb</code>&#x76D1;&#x542C;DisplayManager&#x7684;<code>DISPLAY_MANAGER_SIGNAL_STOPPED</code>&#x4FE1;&#x53F7;&#x3002;&#x6B64;&#x4FE1;&#x53F7;&#x4E3A;&#x505C;&#x6B62;DisplayManager&#x7684;&#x4FE1;&#x606F;&#x3002;&#x76D1;&#x542C;&#x51FD;&#x6570;&#x8C03;&#x7528;<code>g_main_loop_quit</code>&#x51FD;&#x6570;&#x4E2D;&#x65AD;&#x4E3B;&#x7A0B;&#x5E8F;<code>loop</code>&#x5FAA;&#x73AF;&#xFF0C;&#x5C06;&#x7A0B;&#x5E8F;&#x6B63;&#x5E38;&#x9000;&#x51FA;&#x3002;</li>
+<li><code>display_manager_seat_removed_cb</code>&#x76D1;&#x542C;<code>DISPLAY_MANAGER_SIGNAL_SEAT_REMOVED</code>&#x4FE1;&#x53F7;&#x3002;&#x6B64;&#x4FE1;&#x53F7;&#x7531;&#x7528;&#x6237;&#x6CE8;&#x9500;&#x5F15;&#x53D1;&#x3002;&#x76D1;&#x542C;&#x51FD;&#x6570;&#x8981;&#x4E3A;&#x4E0B;&#x4E00;&#x6B21;&#x767B;&#x5F55;&#x4F5C;&#x51C6;&#x5907;&#x3002;&#x5982;&#x679C;&#x53D1;&#x751F;&#x5F02;&#x5E38;&#xFF08;&#x901A;&#x7528;&#x7531;&#x7528;&#x6237;&#x6CE8;&#x9500;&#x5F02;&#x5E38;&#x5F15;&#x53D1;&#xFF09;&#xFF0C;&#x5B83;&#x4F1A;&#x505C;&#x6B62;<code>display_manager</code>&#x7684;&#x8FD0;&#x884C;&#xFF0C;&#x95F4;&#x63A5;&#x5F15;&#x53D1;&#x7A0B;&#x5E8F;&#x9000;&#x51FA;&#x3002;</li>
+<li>&#x8BFB;&#x53D6;<code>lightdm.conf</code>&#x914D;&#x7F6E;&#x8282;<code>LightDM</code>&#x7684;&#x914D;&#x7F6E;<code>dbus-service</code>
+<ol>
+<li>&#x5982;&#x679C;&#x4E3A;<code>true</code>
+<ol>
+<li>&#x901A;&#x8FC7;<code>display_manager_service_new</code>&#x51FD;&#x6570;&#x521B;&#x5EFA;<code>display_manager_service</code>&#x670D;&#x52A1;&#x3002;&#x6B64;&#x51FD;&#x6570;&#x7684;&#x4E3B;&#x8981;&#x4F5C;&#x7528;&#x662F;&#x5728;C&#x5F00;&#x53D1;&#x73AF;&#x5883;&#x6A21;&#x62DF;&#x5355;&#x4F8B;&#x6A21;&#x5F0F;</li>
+<li><code>service_add_xlocal_seat_cb</code>&#x51FD;&#x6570;&#x76D1;&#x542C;<code>DISPLAY_MANAGER_SERVICE_SIGNAL_ADD_XLOCAL_SEAT</code>&#x4FE1;&#x53F7;&#xFF0C;&#x6B64;&#x4FE1;&#x53F7;&#x7531;&#x7528;&#x6237;&#x767B;&#x5F55;&#x6210;&#x529F;&#x89E6;&#x53D1;&#xFF0C;&#x6B64;&#x76D1;&#x542C;&#x51FD;&#x6570;&#x51C6;&#x5907;&#x4E13;&#x5C5E;&#x4E8E;&#x6B64;&#x7528;&#x6237;&#x7684;D-Bus&#x670D;&#x52A1;&#x3002;</li>
+<li><code>service_ready_cb</code>&#x51FD;&#x6570;&#x76D1;&#x542C;<code>DISPLAY_MANAGER_SERVICE_SIGNAL_READY</code>&#x4FE1;&#x53F7;&#x3002;&#x6B64;&#x4FE1;&#x53F7;&#x5728;&#x4E13;&#x5C5E;&#x4E8E;&#x6B64;&#x7528;&#x6237;&#x7684;&#x7684;D-Bus&#x670D;&#x52A1;&#x51C6;&#x5907;&#x5C31;&#x7EEA;&#x540E;&#x89E6;&#x53D1;</li>
+<li><code>service_name_lost_cb</code>&#x51FD;&#x6570;&#x76D1;&#x542C;<code>DISPLAY_MANAGER_SERVICE_SIGNAL_NAME_LOST</code>&#x4FE1;&#x53F7;&#x3002;&#x6B64;&#x76D1;&#x542C;&#x51FD;&#x6570;&#x4F1A;&#x5728;&#x4E0D;&#x6B63;&#x5E38;&#x505C;&#x6B62;<code>display_manager</code>&#x7684;&#x8FD0;&#x884C;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x76F4;&#x63A5;&#x5C06;&#x7A0B;&#x5E8F;&#x9000;&#x51FA;&#xFF0C;&#x800C;&#x4E14;&#x6CA1;&#x6709;&#x8F93;&#x51FA;&#x65E5;&#x5FD7;&#xFF0C;&#x9700;&#x8981;&#x5173;&#x6CE8;&#x3002;</li>
+<li><code>display_manager_service_start</code>&#x542F;&#x52A8;DisplayManager&#x7684;D-Bus&#x670D;&#x52A1;&#x3002;&#x5982;&#x679C;&#x542F;&#x52A8;&#x8EAB;&#x4EFD;&#x662F;root&#x5219;&#x6CE8;&#x518C;&#x5230;&#x7CFB;&#x7EDF;Bus&#xFF0C;&#x5426;&#x5219;&#x6CE8;&#x518C;&#x5230;&#x7528;&#x6237;Bus&#x3002;</li>
+</ol>
+</li>
+<li>&#x5982;&#x679C;&#x4E3A;<code>false</code>
+<ol>
+<li>&#x6267;&#x884C;<code>start_display_manager</code>&#x51FD;&#x6570;&#x3002;&#x6B64;&#x51FD;&#x6570;&#x4F1A;&#x68C0;&#x6D4B;&#x7528;&#x6237;&#x662F;&#x5426;&#x542F;&#x7528;&#x4E86;<code>XDMCPServer</code>&#x670D;&#x52A1;&#x3001;<code>VNCServer</code>&#x670D;&#x52A1;&#x3002;&#x5982;&#x679C;&#x542F;&#x7528;&#x4E86;&#x5C31;&#x4F1A;&#x628A;&#x8FD9;&#x4E9B;&#x670D;&#x52A1;&#x542F;&#x52A8;&#x3002;</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>&#x6267;&#x884C;<code>shared_data_manager_start</code>&#x51FD;&#x6570;&#x3002;&#x6B64;&#x51FD;&#x6570;&#x4F1A;&#x904D;&#x5386;<code>home</code>&#x76EE;&#x5F55;&#xFF0C;&#x76D1;&#x542C;&#x5B50;&#x76EE;&#x5F55;&#x7684;&#x5220;&#x9664;&#x4E8B;&#x4EF6;&#x3002;&#x5982;&#x679C;&#x53D1;&#x751F;&#x5220;&#x9664;&#x4E8B;&#x4EF6;&#x5C31;&#x5F15;&#x53D1;<code>USER_LIST_SIGNAL_USER_REMOVED</code>&#x4FE1;&#x53F7;&#xFF0C;&#x6267;&#x884C;<code>user_removed_cb</code>&#x76D1;&#x542C;&#x51FD;&#x6570;&#x3002;&#x76D1;&#x542C;&#x51FD;&#x6570;&#x8FDB;&#x4E00;&#x6B65;&#x6267;&#x884C;&#x5220;&#x9664;&#x7528;&#x6237;&#x64CD;&#x4F5C;&#x3002;</li>
+<li>&#x6267;&#x884C;<code>login1_service_connect</code>&#x51FD;&#x6570;&#x3002;&#x6B64;&#x51FD;&#x6570;&#x83B7;&#x53D6;<code>Login1Service</code>&#x7684;&#x5355;&#x4F8B;&#x6A21;&#x5F0F;&#xFF0C;&#x8C03;&#x7528;<code>g_bus_get_sync</code>&#x8FDE;&#x63A5;&#x7CFB;&#x7EDF;D-Bus&#xFF0C;&#x8FDE;&#x4E0A;<code>org.freedesktop.login1</code>&#xFF0C;&#x7ACB;&#x5373;&#x8BF7;&#x6C42;<code>ListSeats</code>&#x670D;&#x52A1;&#xFF0C;&#x8FD4;&#x56DE;&#x7ED3;&#x679C;&#x4FDD;&#x5B58;&#x5230;&#x7528;&#x6237;&#x5217;&#x8868;&#x3002;
+<ol>
+<li>&#x5982;&#x679C;&#x4E3A;<code>true</code>
+<ol>
+<li>&#x8BFB;&#x53D6;&#x914D;&#x7F6E;&#x8282;<code>LightDM</code>&#x4E0B;<code>start-default-seat</code>&#x914D;&#x7F6E;&#x3002;&#x6B64;&#x914D;&#x7F6E;&#x6307;&#x793A;&#x9ED8;&#x8BA4;&#x767B;&#x5F55;&#x7684;&#x7528;&#x6237;&#x3002;
+<ol>
+<li>&#x5982;&#x679C;&#x8BFB;&#x53D6;&#x6210;&#x529F;
+<ol>
+<li><code>login1_service_seat_added_cb</code>&#x51FD;&#x6570;&#x76D1;&#x542C;<code>LOGIN1_SERVICE_SIGNAL_SEAT_ADDED</code>&#x4FE1;&#x53F7;&#xFF0C;&#x6B64;&#x4FE1;&#x53F7;&#x7531;&#x7528;&#x6237;&#x767B;&#x5F55;&#x6210;&#x529F;&#x89E6;&#x53D1;</li>
+<li><code>login1_service_seat_removed_cb</code>&#x51FD;&#x6570;&#x76D1;&#x542C;<code>LOGIN1_SERVICE_SIGNAL_SEAT_REMOVED</code>&#x4FE1;&#x53F7;&#xFF0C;&#x6B64;&#x4FE1;&#x53F7;&#x7531;&#x7528;&#x6237;&#x6CE8;&#x9500;&#x89E6;&#x53D1;&#x3002;</li>
+</ol>
+</li>
+<li>&#x5982;&#x679C;&#x8BFB;&#x53D6;&#x5931;&#x8D25;
+<ol>
+<li>&#x4E0D;&#x505A;&#x4EFB;&#x4F55;&#x4E8B;&#x60C5;&#x3002;</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>&#x5982;&#x679C;&#x4E3A;<code>false</code>
+<ol>
+<li>&#x8BFB;&#x53D6;&#x914D;&#x7F6E;&#x8282;<code>LightDM</code>&#x4E0B;<code>start-default-seat</code>&#x914D;&#x7F6E;&#x3002;
+<ol>
+<li>&#x5982;&#x679C;&#x8BFB;&#x53D6;&#x6210;&#x529F;
+<ol>
+<li>&#x8BFB;&#x53D6;&#x914D;&#x7F6E;&#x8282;<code>Seat:*</code>&#x4E0B;<code>type</code>&#x914D;&#x7F6E;&#xFF0C;&#x4FDD;&#x5B58;&#x5230;<code>types</code></li>
+<li>&#x904D;&#x5386;<code>types</code>&#xFF0C;&#x4FDD;&#x5B58;&#x5230;<code>type</code>&#x3002;&#x8C03;&#x7528;<code>create_seat</code>&#xFF0C;&#x4FDD;&#x5B58;&#x5230;<code>seat</code>&#x3002;&#x5982;&#x679C;<code>seat</code>&#x4E0D;&#x4E3A;&#x7A7A;&#x5219;&#x505C;&#x6B62;&#x904D;&#x5386;&#x3002;</li>
+<li>&#x5982;&#x679C;<code>seat</code>&#x4E0D;&#x4E3A;&#x7A7A;&#x5219;&#x6267;&#x884C;<code>display_manager_add_seat</code>&#x51FD;&#x6570;&#xFF0C;&#x6CE8;&#x518C;<code>seat</code>&#x63D0;&#x4F9B;&#x767B;&#x5F55;&#x670D;&#x52A1;
+<ol>
+<li>&#x5982;&#x679C;&#x6CE8;&#x518C;<code>seat</code>&#x5931;&#x8D25;&#x5C31;&#x76F4;&#x63A5;&#x9000;&#x51FA;&#x7A0B;&#x5E8F;&#x3002;&#x6B64;&#x8FC7;&#x7A0B;&#x6CA1;&#x6709;&#x8F93;&#x51FA;&#x65E5;&#x5FD7;&#xFF0C;&#x9700;&#x8981;&#x5173;&#x6CE8;&#x3002;</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>&#x5982;&#x679C;&#x8BFB;&#x53D6;&#x5931;&#x8D25;
+<ol>
+<li>&#x4E0D;&#x505A;&#x4EFB;&#x4F55;&#x4E8B;&#x60C5;&#x3002;</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>&#x6267;&#x884C;<code>g_main_loop_run</code>&#xFF0C;&#x6B64;&#x51FD;&#x6570;&#x7684;&#x4E3B;&#x8981;&#x4F5C;&#x7528;&#x662F;&#x5185;&#x5B58;&#x9A7B;&#x7559;&#x3002;</li>
+<li>&#x6E05;&#x7406;&#x7528;&#x6237;&#x5217;&#x8868;&#xFF0C;&#x65AD;&#x5F00;D-Bus&#x8FDE;&#x63A5;</li>
+<li>&#x91CA;&#x653E;<code>display_manager_service</code>&#x548C;<code>display_manager</code>&#x7684;&#x5185;&#x5B58;</li>
+<li>&#x9000;&#x51FA;&#x3002;</li>
+</ol>
+<h1><li> LightDM&#x7BA1;&#x7406;&#x7684;Seat&#x4E0E;&#x7CFB;&#x7EDF;&#x7684;PAM&#x7684;&#x5173;&#x8054; </li></h1>
+<ol>
+<li>
+<h3>LightDM&#x7684;&#x6838;&#x5FC3;&#x7C7B;&#x578B;&#xFF1A;<code>Seat</code>&#x548C;<code>Session</code></h3>
+<p><code>Seat</code>&#x548C;<code>Session</code>&#x90FD;&#x662F;&#x4E00;&#x4E2A;&#x6D3E;&#x751F;&#x81EA;<a href="https://developer.gnome.org/gobject/stable/"><code>GObject</code></a>&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x3002;<code>GObject</code>&#x662F;GLibC&#x7528;C&#x8BED;&#x8A00;&#x6A21;&#x62DF;&#x7684;&#x7C7B;&#xFF0C;&#x5B83;&#x5728;C&#x8BED;&#x8A00;&#x4E0A;&#x5B9E;&#x73B0;&#x4E86;OOP&#x3002;&#x5B83;&#x662F;GLibC&#x8FD0;&#x884C;&#x65F6;&#x4E0B;&#x5BF9;&#x8C61;&#x7684;&#x57FA;&#x7C7B;&#x578B;&#xFF0C;&#x4E0E;Qt&#x7684;<code>QObject</code>&#x5728;&#x8BBE;&#x8BA1;&#x601D;&#x60F3;&#x6709;&#x8BB8;&#x591A;&#x76F8;&#x4F3C;&#x4E4B;&#x5904;&#x3002;&#x6BD4;&#x5982;&#x5728;&#x5BF9;&#x8C61;&#x7684;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x65B9;&#x9762;&#x90FD;&#x6709;&#x4E00;&#x4E2A;&#x5185;&#x5B58;&#x6C60;&#x7684;&#x8BBE;&#x8BA1;&#x3001;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x4E5F;&#x6709;&#x5F3A;&#x5F15;&#x7528;&#x548C;&#x5F31;&#x5F15;&#x7528;&#x4E4B;&#x5206;&#xFF0C;&#x5BF9;&#x8C61;&#x6216;&#x6A21;&#x5757;&#x4E4B;&#x95F4;&#x7684;&#x901A;&#x4FE1;&#x90FD;&#x6709;&#x4E00;&#x4E2A;&#x4FE1;&#x53F7;&#x69FD;&#x7684;&#x8BBE;&#x8BA1;&#x3001;&#x5728;&#x5BF9;&#x8C61;&#x7684;&#x5B58;&#x50A8;&#x7ED3;&#x6784;&#x65B9;&#x9762;&#x90FD;&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E2A;Variant&#x7C7B;&#x578B;&#x7684;&#x8BBE;&#x8BA1;&#x7528;&#x4E8E;&#x52A8;&#x6001;&#x589E;&#x52A0;&#x3001;&#x4FEE;&#x6539;&#x3001;&#x5220;&#x9664;&#x5BF9;&#x8C61;&#x7684;&#x5C5E;&#x6027;&#x7B49;&#x7B49;&#x3002;&#x4E3E;&#x4F8B;&#x8BF4;&#x660E;&#xFF0C;Qt&#x652F;&#x6301;&#x7528;&#x6237;&#x628A;&#x4E0D;&#x60F3;&#x7BA1;&#x7406;&#x5185;&#x5B58;&#x7684;&#x5BF9;&#x8C61;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x7EE7;&#x627F;QObject&#x4EA4;&#x7ED9;Qt&#x8FD0;&#x884C;&#x65F6;&#x7BA1;&#x7406;&#xFF0C;&#x4F7F;&#x7528;&#x7684;&#x65F6;&#x5019;&#x53EA;&#x7BA1;new&#x4E00;&#x4E2A;&#x51FA;&#x6765;&#xFF0C;&#x4E0D;&#x5FC5;&#x4F7F;&#x7528;&#x667A;&#x80FD;&#x6307;&#x9488;&#x5305;&#x88C5;&#x3002;</p>
+<p>GLibC&#x4E5F;&#x6709;&#x7C7B;&#x4F3C;&#x7684;&#x60F3;&#x6CD5;&#x3002;&#x4E0D;&#x8FC7;&#x5B83;&#x662F;&#x57FA;&#x4E8E;C&#x8BED;&#x8A00;&#x8BBE;&#x8BA1;&#x7684;&#x6846;&#x67B6;&#xFF0C;&#x6CA1;&#x6709;C++&#x7684;&#x7C7B;&#x3001;&#x6784;&#x9020;&#x3001;&#x6790;&#x6784;&#x7B49;&#x8BED;&#x6CD5;&#xFF0C;&#x4F46;&#x5B83;&#x901A;&#x8FC7;C&#x51FD;&#x6570;&#x7684;&#x5305;&#x88C5;&#x5236;&#x9020;&#x51FA;&#x6765;&#x4E86;&#x7C7B;&#x4F3C;&#x7684;&#x6982;&#x5FF5;&#x3002;&#x4E3E;&#x4F8B;&#x8BF4;&#x660E;&#xFF0C;GLibC&#x63D0;&#x4F9B;&#x4E86;&#x5B8F;&#x5B9A;&#x4E49;<code>G_DEFINE_TYPE_WITH_PRIVATE</code>&#xFF0C;&#x5B83;&#x57FA;&#x4E8E;&#x4E00;&#x4E2A;&#x7ED3;&#x6784;&#x4F53;<code>struct1</code>&#x6CE8;&#x518C;&#x4E24;&#x4E2A;&#x7C7B;&#x578B;<code>struct1</code>&#x548C;<code>struct1Private</code>&#xFF0C;&#x540C;&#x65F6;&#x5B9A;&#x4E49;&#x4E86;<code>struct1_class_init</code>&#x4F5C;&#x4E3A;&#x6784;&#x9020;&#x51FD;&#x6570;&#x7684;&#x89D2;&#x8272;&#xFF0C;<code>struct1_class_finalize</code>&#x4F5C;&#x4E3A;&#x6790;&#x6784;&#x51FD;&#x6570;&#x7684;&#x89D2;&#x8272;&#x3002;<code>struct1.h</code>&#x6587;&#x4EF6;&#x4E2D;&#x5B9A;&#x4E49;public&#x65B9;&#x6CD5;&#x548C;&#x5C5E;&#x6027;&#xFF0C;<code>struct1.c</code>&#x6587;&#x4EF6;&#x5B9A;&#x4E49;private&#x65B9;&#x6CD5;&#x548C;&#x5C5E;&#x6027;&#x3002;&#x4E0E;C++&#x4E0D;&#x540C;&#x7684;&#x662F;&#x5BF9;&#x8C61;&#x7684;&#x6784;&#x9020;&#x4E0E;&#x6790;&#x6784;&#x90FD;&#x5FC5;&#x987B;&#x653E;&#x5728;c&#x6587;&#x4EF6;&#x91CC;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x5176;&#x5B83;&#x7C7B;&#x578B;&#x76F4;&#x63A5;&#x5F15;&#x7528;&#xFF0C;&#x5426;&#x5219;&#x7834;&#x574F;&#x4E86;GLibC&#x7684;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x673A;&#x5236;&#x3002;GLibC&#x63D0;&#x4F9B;&#x4E86;<code>g_type_create_instance</code>&#x51FD;&#x6570;&#x7528;&#x4E8E;&#x6784;&#x9020;&#x4E00;&#x4E2A;&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;,&#x63D0;&#x4F9B;&#x4E86;<code>g_type_free_instance</code>&#x7528;&#x4E8E;&#x624B;&#x52A8;&#x91CA;&#x653E;&#x4E00;&#x4E2A;&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x3002;</p>
+<p>GLibC&#x7C7B;&#x7684;&#x547D;&#x540D;&#x9075;&#x5FAA;&#x5927;&#x9A7C;&#x5CF0;&#x89C4;&#x8303;&#xFF0C;&#x65B9;&#x6CD5;&#x7684;&#x547D;&#x540D;&#x3001;&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#x7684;&#x547D;&#x540D;&#x3001;&#x51FD;&#x6570;&#x7684;&#x547D;&#x540D;&#x90FD;&#x9075;&#x5FAA;boost&#x89C4;&#x8303;&#x3002;&#x7B2C;1&#x90E8;&#x5206;&#x5217;&#x4E3E;&#x7684;&#x91CD;&#x8981;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x90FD;&#x5B8C;&#x5168;&#x9075;&#x5FAA;&#x6B64;&#x547D;&#x540D;&#x89C4;&#x8303;&#x3002;<em>&#x4E0B;&#x6587;&#x4E3A;&#x65B9;&#x4FBF;&#x63CF;&#x8FF0;&#xFF0C;&#x4EE5;&#x5BF9;&#x8C61;&#x7684;&#x6784;&#x9020;&#x51FD;&#x6570;&#x3001;&#x6790;&#x6784;&#x51FD;&#x6570;&#x63CF;&#x8FF0;&#x5BF9;&#x8C61;&#x7684;&#x91CD;&#x8981;&#x51FD;&#x6570;&#x4EE5;&#x53CA;&#x5176;&#x5B9E;&#x73B0;&#x7684;&#x529F;&#x80FD;</em>&#x3002;</p>
+<p><code>Seat</code>&#x548C;<code>Session</code>&#x662F;&#x4E00;&#x5BF9;&#x591A;&#x7684;&#x5173;&#x7CFB;&#xFF0C;&#x800C;<code>Session</code>&#x662F;&#x4E00;&#x7528;GLibC&#x505A;&#x51FA;&#x6765;&#x7684;&#x865A;&#x7C7B;&#xFF0C;&#x5B9E;&#x73B0;&#x8005;&#x662F;<code>GreeterSession</code>&#x3002;<code>Session</code>&#x4E0A;&#x589E;&#x52A0;&#x4E86;&#x8BB8;&#x591A;&#x51FD;&#x6570;&#x6307;&#x9488;&#x7C7B;&#x578B;&#x7684;&#x6210;&#x5458;&#x53D8;&#x91CF;&#xFF0C;&#x5176;&#x4E2D;&#x6700;&#x91CD;&#x8981;&#x7684;&#x662F;<code>gboolean (*)(Session *)</code>&#x7C7B;&#x578B;&#x7684;<code>start</code>&#x6210;&#x5458;&#x53D8;&#x91CF;&#x548C;<code>void (*)(Session *)</code>&#x7C7B;&#x578B;&#x7684;<code>stop</code>&#x6210;&#x5458;&#x53D8;&#x91CF;&#x3002;<code>start</code>&#x6700;&#x7EC8;&#x542F;&#x52A8;&#x4E86;&#x4F4D;&#x4E8E;<code>seat.c</code>&#x4E2D;&#x7684;<code>session_real_start</code>&#x51FD;&#x6570;</p>
+<p><code>Seat</code>&#x4E3B;&#x8981;&#x6709;3&#x79CD;&#x6D3E;&#x751F;&#x7C7B;&#x578B;&#xFF0C;&#x5BF9;&#x5E94;&#x7684;&#x5B9E;&#x73B0;&#x5206;&#x522B;&#x5728;<code>seat-local.c</code>&#x3001;<code>seat-unity.c</code>&#x3001;<code>seat-xremote.c</code>&#x3002;<code>seat.c</code>&#x662F;&#x5B83;&#x4EEC;&#x7684;&#x57FA;&#x7C7B;&#x578B;&#x3002;&#x7B2C;&#x4E00;&#x4E2A;&#x662F;LightDM&#x9ED8;&#x8BA4;&#x4F7F;&#x7528;&#x7684;Seat&#x7C7B;&#x578B;&#x3002;Seat&#x5FC5;&#x987B;&#x81F3;&#x5C11;&#x5B9E;&#x73B0;<code>setup</code>&#x3001;<code>create_display_server</code>&#x3001;<code>create_greeter_session</code>&#x3001;<code>create_session</code>&#x3001;<code>run_script</code>&#x8FD9;4&#x4E2A;&#x51FD;&#x6570;&#xFF0C;&#x5E76;&#x5C06;&#x51FD;&#x6570;&#x7684;&#x6307;&#x9488;&#x8D4B;&#x503C;&#x5230;Seat&#x5BF9;&#x8C61;&#x5BF9;&#x5E94;&#x7684;&#x6210;&#x5458;&#x53D8;&#x91CF;&#x4E0A;&#x3002;</p>
+</li>
+<li>
+<h3>&#x4E3B;&#x8981;&#x7684;Seat&#x5BF9;&#x8C61;&#x4EE5;&#x53CA;&#x5176;&#x5173;&#x8054;&#x7684;Session&#x7684;&#x4EA7;&#x751F;&#x8FC7;&#x7A0B;</h3>
+<ol>
+<li>&#x8FDE;&#x63A5;<code>org.freedekstop.login1</code>&#x670D;&#x52A1;&#xFF0C;<code>signal_cb</code>&#x76D1;&#x542C;&#x6B64;&#x670D;&#x52A1;&#x7684;&#x4FE1;&#x53F7;</li>
+<li><code>login1_service_seat_added_cb</code>&#x65B9;&#x6CD5;&#x76D1;&#x542C;<code>LOGIN1_SERVICE_SIGNAL_SEAT_ADDED</code>&#x4FE1;&#x53F7;</li>
+<li>&#x6267;&#x884C;<code>login1_service_get_seats</code>&#x65B9;&#x6CD5;&#xFF0C;&#x904D;&#x5386;Login1Seat&#x5217;&#x8868;&#xFF0C;&#x5BF9;&#x6BCF;&#x4E2A;Login1Seat&#x90FD;&#x8C03;&#x7528;<code>login1_add_seat</code>&#x65B9;&#x6CD5;&#x8C03;&#x7528;<code>display_manager_get_seat</code>&#x65B9;&#x6CD5;&#x5224;&#x65AD;&#x662F;&#x5426;&#x5DF2;&#x7ECF;&#x7ED9;&#x6B64;Seat&#x5206;&#x914D;&#x4E86;&#x663E;&#x793A;&#x8D44;&#x6E90;&#x3002;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x5219;&#x8C03;&#x7528;<code>add_login1_seat</code>&#x65B9;&#x6CD5;&#x3002;&#x5982;&#x679C;&#x53D1;&#x73B0;&#x6B64;Login1Seat&#x4E0D;&#x5177;&#x6709;&#x663E;&#x793A;&#x8D44;&#x6E90;&#x7684;&#x6743;&#x9650;&#x5219;&#x8C03;&#x7528;<code>remove_login1_seat</code>&#x65B9;&#x6CD5;&#xFF0C;&#x628A;&#x5B83;&#x79FB;&#x9664;&#x3002;</li>
+<li><code>add_login1_seat</code>&#x6267;&#x884C;&#x7684;&#x662F;&#x6709;&#x663E;&#x793A;&#x8D44;&#x6E90;&#x5374;&#x8FD8;&#x672A;&#x5206;&#x914D;&#x7684;Login1Seat&#x3002;&#x6B64;&#x65F6;&#x4EA7;&#x751F;LightDM&#x7BA1;&#x7406;&#x7684;Seat&#x3002;&#x968F;&#x540E;&#x8C03;&#x7528;<code>display_manager_add_seat</code>&#x65B9;&#x6CD5;&#x3002;</li>
+<li><code>display_manager_add_seat</code>&#x8C03;&#x7528;&#x4E86;<code>seat_start</code>&#x65B9;&#x6CD5;&#xFF0C;&#x5E76;&#x89E6;&#x53D1;&#x4E86;<code>DISPLAY_MANAGER_SIGNAL_SEAT_ADDED</code>&#x4FE1;&#x53F7;&#x3002;&#x8BA2;&#x9605;&#x6B64;&#x4FE1;&#x53F7;&#x7684;&#x662F;dispmay-manager-service&#x3002;&#x5B83;&#x662F;<code>org.freedesktop.DisplayManager</code>&#x8FD9;&#x4E2A;&#x7CFB;&#x7EDF;D-Bus&#x670D;&#x52A1;&#x7684;&#x5B9E;&#x73B0;&#x3002;</li>
+<li><code>seat_start</code>&#x83B7;&#x53D6;Seat&#x5173;&#x8054;&#x7684;<code>SeatClass</code>&#x5BF9;&#x8C61;&#x7684;<code>setup</code>&#x6210;&#x5458;&#x53D8;&#x91CF;&#x548C;<code>start</code>&#x6210;&#x5458;&#x53D8;&#x91CF;&#x3002;&#x8FD9;2&#x4E2A;&#x6210;&#x5458;&#x53D8;&#x91CF;&#x90FD;&#x662F;&#x51FD;&#x6570;&#x6307;&#x9488;&#xFF0C;<code>setup</code>&#x6307;&#x5411;&#x7684;&#x65B9;&#x6CD5;&#x662F;<code>seat_local_setup</code>&#xFF0C;&#x6B64;&#x51FD;&#x6570;&#x4EC0;&#x4E48;&#x4E8B;&#x90FD;&#x6CA1;&#x505A;&#x3002;<code>start</code>&#x6307;&#x5411;&#x4E86;<code>seat_local_start</code>&#x51FD;&#x6570;&#x9996;&#x5148;&#x8BFB;&#x53D6;&#x81EA;&#x52A8;&#x767B;&#x5F55;&#x914D;&#x7F6E;&#x3002;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x81EA;&#x52A8;&#x767B;&#x5F55;&#x6216;&#x8005;&#x767B;&#x5F55;&#x5931;&#x8D25;&#x5219;&#x542F;&#x52A8;greeter&#x4F1A;&#x8BDD;&#x3002;</li>
+<li><code>create_greeter_session</code>&#x51FD;&#x6570;&#x5B9E;&#x73B0;&#x4E86;&#x542F;&#x52A8;greeter&#x4F1A;&#x8BDD;&#x3002;&#x4F1A;&#x8BDD;&#x5C31;&#x662F;Session&#x3002;&#x6B64;Session&#x662F;<code>GreeterSession</code>&#x7C7B;&#x578B;&#xFF0C;&#x5173;&#x8054;&#x4E86;<code>GreeterSessionClass</code>&#x7C7B;&#x578B;&#x3002;&#x6B64;&#x51FD;&#x6570;&#x83B7;&#x53D6;seat&#x5BF9;&#x8C61;&#x7684;<code>create_greeter_session</code>&#x6210;&#x5458;&#x53D8;&#x91CF;&#x3002;&#x7279;&#x522B;&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F;&#x8FD9;&#x4E2A;&#x6210;&#x5458;&#x53D8;&#x91CF;&#x4E0E;<code>seat.c</code>&#x5B9A;&#x4E49;&#x7684;<code>create_greeter_session</code>&#x4E0D;&#x662F;&#x540C;&#x4E00;&#x4E2A;&#x4E1C;&#x897F;&#xFF0C;&#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x6307;&#x9488;&#xFF0C;&#x4F46;&#x672C;&#x8EAB;&#x662F;&#x53D8;&#x91CF;&#xFF0C;&#x4E0D;&#x662F;&#x51FD;&#x6570;&#x3002;&#x5BF9;&#x4E8E;LightDM&#x9ED8;&#x8BA4;&#x7684;Seat&#x7C7B;&#x578B;&#xFF0C;&#x5B83;&#x6307;&#x5411;&#x4E86;<code>seat_local_create_greeter_session</code>&#x51FD;&#x6570;&#x3002;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x5F97;&#x5230;&#x4E86;&#x7236;&#x7C7B;&#x578B;&#x7684;<code>create_greeter_session</code>&#x6210;&#x5458;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x8C03;&#x7528;&#x4E86;<code>seat_real_create_greeter_session</code>&#x65B9;&#x6CD5;&#x3002;&#x63A5;&#x4E0B;&#x6765;&#x53C8;&#x8C03;&#x7528;&#x4E86;<code>greeter_session_new</code>&#x65B9;&#x6CD5;&#x3002;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x8FD4;&#x56DE;&#x4E86;&#x4E00;&#x4E2A;<code>GreeterSession</code>&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x6307;&#x9488;&#x3002;&#x8FD9;&#x5C31;&#x662F;Session&#xFF0C;&#x5B83;&#x7684;<code>start</code>&#x6210;&#x5458;&#x53D8;&#x91CF;&#x4E5F;&#x662F;&#x4E2A;&#x51FD;&#x6570;&#x6307;&#x9488;&#xFF0C;&#x6307;&#x5411;&#x4E86;<code>greeter_session_start</code>&#x65B9;&#x6CD5;&#x3002;</li>
+<li><code>seat</code>&#x5BF9;&#x8C61;<code>create_greeter_session</code>&#x6210;&#x5458;&#x53D8;&#x91CF;&#x6307;&#x5411;&#x7684;&#x51FD;&#x6570;&#x521B;&#x5EFA;&#x4E86;<code>greeter_session</code>&#x3002;&#x6B64;&#x65B9;&#x6CD5;&#x76D1;&#x542C;&#x4E86;<code>greeter_session</code>&#x7684;<code>SESSION_SIGNAL_AUTHENTICATION_COMPLETE</code>&#x4FE1;&#x53F7;&#x3002;&#x5F53;&#x7528;&#x6237;&#x5355;&#x6B21;&#x767B;&#x5F55;&#x64CD;&#x4F5C;&#x5B8C;&#x6210;&#x65F6;&#x89E6;&#x53D1;&#x6B64;&#x4FE1;&#x53F7;&#x3002;&#x540C;&#x65F6;&#x7EE7;&#x7EED;&#x76D1;&#x542C;<code>GREETER_SIGNAL_CREATE_SESSION</code>&#x4FE1;&#x53F7;&#x548C;<code>GREETER_SIGNAL_START_SESSION</code>&#x4FE1;&#x53F7;&#xFF0C;&#x5206;&#x522B;&#x7531;<code>greeter_create_session_cb</code>&#x548C;<code>greeter_start_session_cb</code>&#x51FD;&#x6570;&#x5904;&#x7406;&#x3002;</li>
+<li><code>seat_real_start</code>&#x51FD;&#x6570;&#x5F97;&#x5230;<code>greeter_session</code>&#x540E;&#x8C03;&#x7528;<code>create_display_server</code>&#x65B9;&#x6CD5;&#x3002;<code>create_display_server</code>&#x627E;&#x5230;Seat&#x5BF9;&#x8C61;&#x4E0A;&#x7684;<code>create_display_server</code>&#x6210;&#x5458;&#x53D8;&#x91CF;&#x3002;&#x8FD9;&#x4E2A;&#x6210;&#x5458;&#x53D8;&#x91CF;&#x662F;&#x4E2A;&#x51FD;&#x6570;&#x6307;&#x9488;&#x3002;&#x8C03;&#x7528;<code>create_display_server</code>&#x6307;&#x5411;&#x7684;&#x51FD;&#x6570;&#x5F97;&#x5230;<code>display_server</code></li>
+</ol>
+</li>
+<li>
+<h2>PAM&#x9A8C;&#x8BC1;&#x8FC7;&#x7A0B;</h2>
+<ol>
+<li>&#x5F53;<code>greeter_session</code>&#x542F;&#x52A8;&#x540E;</li>
+</ol>
+</li>
+<li>
+<h2>&#x65B9;&#x6CD5;&#x8C03;&#x7528;&#x5148;&#x540E;&#x987A;&#x5E8F;</h2>
+</li>
+</ol>
+<svg width="45cm" height="55cm" viewBox="-2641 -450 1785 2091" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">
+  <defs/>
+  <g id="&#x80CC;&#x666F;">
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e5e5e5" x="-2620" y="980" width="540" height="280" rx="0" ry="0"/>
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e5e5e5" x="-2000" y="-400" width="1033.91" height="945.533" rx="0" ry="0"/>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1280" y="-214.468" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1148" y="-171.618">
+        <tspan x="-1148" y="-171.618">create_greeter_session</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1663.19" y="37.5238" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1531.19" y="80.3738">
+        <tspan x="-1531.19" y="80.3738">switch_to_greeter_from_failed_session</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1399.19,73.5238 -1340,73.5238 -1340,-178.468 -1289.74,-178.468 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1282.24,-178.468 -1292.24,-173.468 -1289.74,-178.468 -1292.24,-183.468 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1660" y="165.532" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1528" y="208.382">
+        <tspan x="-1528" y="208.382">seat_switch_to_greeter</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1396,201.532 -1340,201.532 -1340,-178.468 -1289.74,-178.468 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1282.24,-178.468 -1292.24,-173.468 -1289.74,-178.468 -1292.24,-183.468 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1663.19" y="-354.828" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1531.19" y="-311.978">
+        <tspan x="-1531.19" y="-311.978">seat_lock</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1660" y="-214.468" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1528" y="-171.618">
+        <tspan x="-1528" y="-171.618">seat_real_start</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1396,-178.468 -1338,-178.468 -1338,-178.468 -1289.74,-178.468 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1282.24,-178.468 -1292.24,-173.468 -1289.74,-178.468 -1292.24,-183.468 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1976" y="37.532" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1844" y="80.382">
+        <tspan x="-1844" y="80.382">seat_class_init</tspan>
+      </text>
+    </g>
+    <g>
+      <path style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" fill-rule="evenodd" d="M -1880 -74.468 L -1832.1,-74.468 L -1832.1,-28.868 C -1841.68,-36.468 -1846.47,-36.468 -1856.05,-28.868 C -1865.63,-21.268 -1870.42,-21.268 -1880,-28.868 L -1880,-74.468z"/>
+      <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1856.05" y="-56.268">
+        <tspan x="-1856.05" y="-56.268">Seat </tspan>
+        <tspan x="-1856.05" y="-40.268">start</tspan>
+      </text>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" x1="-1848.35" y1="36.5257" x2="-1854.91" y2="-19.1987"/>
+      <polygon style="fill: #ff0000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" fill-rule="evenodd" points="-1855.79,-26.6473 -1849.65,-17.3001 -1854.91,-19.1987 -1859.59,-16.1314 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1980" y="-214.468" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1848" y="-171.618">
+        <tspan x="-1848" y="-171.618">seat_start</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1399.19,-318.828 -1339.59,-318.828 -1339.59,-178.468 -1289.74,-178.468 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1282.24,-178.468 -1292.24,-173.468 -1289.74,-178.468 -1292.24,-183.468 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1280" y="285.532" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1148" y="328.382">
+        <tspan x="-1148" y="328.382">start_session</tspan>
+      </text>
+    </g>
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e5e5e5" x="-1720" y="1000" width="776.55" height="640" rx="0" ry="0"/>
+    <text font-size="25.2194" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1720" y="1000">
+      <tspan x="-1720" y="1000">session.c</tspan>
+    </text>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1250" y="1480" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1118" y="1522.85">
+        <tspan x="-1118" y="1522.85">session_start</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1280" y="405.532" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1148" y="448.382">
+        <tspan x="-1148" y="448.382">seat_switch_to_user</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1016,321.532 -880,321.532 -880,1516 -976.264,1516 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-983.764,1516 -973.764,1511 -976.264,1516 -973.764,1521 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1016,441.532 -880,441.532 -880,1516 -976.264,1516 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-983.764,1516 -973.764,1511 -976.264,1516 -973.764,1521 "/>
+    </g>
+    <text font-size="25.2194" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2000" y="-400">
+      <tspan x="-2000" y="-400">seat.c</tspan>
+    </text>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1660" y="405.532" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1528" y="448.382">
+        <tspan x="-1528" y="448.382">display_server_ready_cb</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1396,441.532 -1300,441.532 -1300,321.532 -1289.74,321.532 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1282.24,321.532 -1292.24,326.532 -1289.74,321.532 -1292.24,316.532 "/>
+    </g>
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e5e5e5" x="-2620" y="320" width="380" height="620" rx="0" ry="0"/>
+    <text font-size="25.2194" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2620" y="320">
+      <tspan x="-2620" y="320">display-manager.c</tspan>
+    </text>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-2560" y="360" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2428" y="402.85">
+        <tspan x="-2428" y="402.85">display_manager_add_seat</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-2296,396 -2296,396 -2080,396 -2080,-178.468 -1989.74,-178.468 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1982.24,-178.468 -1992.24,-173.468 -1989.74,-178.468 -1992.24,-183.468 "/>
+    </g>
+    <text font-size="25.2194" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2620" y="980">
+      <tspan x="-2620" y="980">display-manager-service.c</tspan>
+    </text>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-2560" y="1000" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2428" y="1042.85">
+        <tspan x="-2428" y="1042.85">seat_added_cb</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-2296,396 -2220,396 -2220,1036 -2286.26,1036 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-2293.76,1036 -2283.76,1031 -2286.26,1036 -2283.76,1041 "/>
+    </g>
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e5e5e5" x="-2620" y="-420" width="380" height="660" rx="0" ry="0"/>
+    <text font-size="25.2194" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2620" y="-420">
+      <tspan x="-2620" y="-420">lightdm.c</tspan>
+    </text>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-2560" y="-380" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2428" y="-337.15">
+        <tspan x="-2428" y="-337.15">main</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-2296,-344 -2160,-344 -2160,280 -2581,280 -2581,396 -2569.74,396 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-2562.24,396 -2572.24,401 -2569.74,396 -2572.24,391 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-2560" y="-280" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2428" y="-237.15">
+        <tspan x="-2428" y="-237.15">add_login1_seat</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-2560" y="-180" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2428" y="-137.15">
+        <tspan x="-2428" y="-137.15">vnc_connection_cb</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-2560" y="-80" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2428" y="-37.15">
+        <tspan x="-2428" y="-37.15">xdmcp_session_cb</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-2560" y="20" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2428" y="62.85">
+        <tspan x="-2428" y="62.85">display_manager_seat_removed_cb</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-2560" y="120" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2428" y="162.85">
+        <tspan x="-2428" y="162.85">service_add_xlocal_seat_cb</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-2296,-244 -2160,-244 -2160,280 -2580,280 -2580,396 -2569.74,396 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-2562.24,396 -2572.24,401 -2569.74,396 -2572.24,391 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-2296,-144 -2160,-144 -2160,280 -2580,280 -2580,396 -2569.74,396 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-2562.24,396 -2572.24,401 -2569.74,396 -2572.24,391 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-2296,-44 -2296,-44 -2160,-44 -2160,280 -2580,280 -2580,396 -2569.74,396 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-2562.24,396 -2572.24,401 -2569.74,396 -2572.24,391 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-2296,56 -2160,56 -2160,280 -2580,280 -2580,396 -2569.74,396 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-2562.24,396 -2572.24,401 -2569.74,396 -2572.24,391 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-2296,156 -2160,156 -2160,280 -2580,280 -2580,396 -2569.74,396 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-2562.24,396 -2572.24,401 -2569.74,396 -2572.24,391 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1716,-178.468 -1688,-178.468 -1688,-178.468 -1669.74,-178.468 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1662.24,-178.468 -1672.24,-173.468 -1669.74,-178.468 -1672.24,-183.468 "/>
+    </g>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1396" y="-196.468">
+      <tspan x="-1396" y="-196.468">auto logon</tspan>
+    </text>
+    <g>
+      <path style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" d="M -1219.7 -335.194 L -1075.55,-335.194 L -1075.55,-289.594 C -1104.38,-297.194 -1118.8,-297.194 -1147.63,-289.594 C -1176.46,-281.994 -1190.87,-281.994 -1219.7,-289.594 L -1219.7,-335.194z"/>
+      <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1147.63" y="-316.994">
+        <tspan x="-1147.63" y="-316.994">SeatClass</tspan>
+        <tspan x="-1147.63" y="-300.994">create_greeter_session</tspan>
+      </text>
+    </g>
+    <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" x1="-1147.63" y1="-289.594" x2="-1148" y2="-214.468"/>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1279.7" y="-75.1936" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1147.7" y="-32.3436">
+        <tspan x="-1147.7" y="-32.3436">session_authentication_complete_cb</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1148,-142.468 -1148,-108.831 -1147.7,-108.831 -1147.7,-84.9297 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1147.7,-77.4297 -1152.7,-87.4297 -1147.7,-84.9297 -1142.7,-87.4297 "/>
+    </g>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1147.85" y="-108.831">
+      <tspan x="-1147.85" y="-108.831">SESSION_SIGNAL_AUTHENTICATION_COMPLETE</tspan>
+    </text>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1015.7" y="-39.1936">
+      <tspan x="-1015.7" y="-39.1936">logon</tspan>
+    </text>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1279.7" y="44.8064" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1147.7" y="87.6564">
+        <tspan x="-1147.7" y="87.6564">find_user_session</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1147.7,-3.1936 -1147.7,20.8064 -1147.7,20.8064 -1147.7,35.0703 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1147.7,42.5703 -1152.7,32.5703 -1147.7,35.0703 -1142.7,32.5703 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1980" y="225.532" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1848" y="268.382">
+        <tspan x="-1848" y="268.382">create_display_server</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1848,297.532 -1848,471.674 -1663.88,471.674 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1656.38,471.674 -1666.38,476.674 -1663.88,471.674 -1666.38,466.674 "/>
+    </g>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1848" y="384.604">
+      <tspan x="-1848" y="384.604">DISPLAY_SERVER_SIGNAL_READY</tspan>
+    </text>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1240" y="1040" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1108" y="1082.85">
+        <tspan x="-1108" y="1082.85">session_real_start</tspan>
+      </text>
+    </g>
+    <g>
+      <path style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" d="M -1143.9 1339.55 L -1092.1,1339.55 L -1092.1,1404.35 C -1102.46,1393.55 -1107.64,1393.55 -1118,1404.35 C -1128.36,1415.15 -1133.54,1415.15 -1143.9,1404.35 L -1143.9,1339.55z"/>
+      <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1118" y="1357.75">
+        <tspan x="-1118" y="1357.75">Session</tspan>
+        <tspan x="-1118" y="1373.75">start</tspan>
+        <tspan x="-1118" y="1389.75">run</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1660" y="1480" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1528" y="1522.85">
+        <tspan x="-1528" y="1522.85">session_class_init</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" points="-1118,1470.26 -1118,1442.18 -1118,1442.18 -1118,1404.35 "/>
+      <polygon style="fill: #ff0000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" fill-rule="evenodd" points="-1118,1477.76 -1123,1467.76 -1118,1470.26 -1113,1467.76 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1250" y="1200" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1118" y="1242.85">
+        <tspan x="-1118" y="1242.85">session_run</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1250,1516 -1320,1516 -1320,1106.14 -1243.88,1106.14 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1236.38,1106.14 -1246.38,1111.14 -1243.88,1106.14 -1246.38,1101.14 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1640" y="1200" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1508" y="1242.85">
+        <tspan x="-1508" y="1242.85">session_real_run</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1250,1236 -1313,1236 -1313,1236 -1366.26,1236 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1373.76,1236 -1363.76,1231 -1366.26,1236 -1363.76,1241 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" x1="-1856.05" y1="-74.468" x2="-1849.14" y2="-132.799"/>
+      <polygon style="fill: #ff0000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" fill-rule="evenodd" points="-1848.26,-140.247 -1844.47,-129.729 -1849.14,-132.799 -1854.4,-130.905 "/>
+    </g>
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e5e5e5" x="-2000" y="600" width="1033.91" height="320" rx="0" ry="0"/>
+    <text font-size="25.2194" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2000" y="600">
+      <tspan x="-2000" y="600">greeter.c</tspan>
+    </text>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1272.29" y="640" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1140.29" y="682.85">
+        <tspan x="-1140.29" y="682.85">handle_authenticate</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1273.08" y="780" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1141.08" y="822.85">
+        <tspan x="-1141.08" y="822.85">handle_authenticate_remote</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1640" y="640" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1508" y="682.85">
+        <tspan x="-1508" y="682.85">read_cb</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1376,676 -1324.15,676 -1324.15,676 -1282.03,676 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1274.53,676 -1284.53,681 -1282.03,676 -1284.53,671 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1980" y="640" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1848" y="682.85">
+        <tspan x="-1848" y="682.85">greeter_set_file_descriptors</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1716,676 -1678,676 -1678,676 -1649.74,676 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1642.24,676 -1652.24,681 -1649.74,676 -1652.24,671 "/>
+    </g>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1483.04" y="760">
+      <tspan x="-1483.04" y="760"/>
+    </text>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1716" y="694">
+      <tspan x="-1716" y="694">GIO</tspan>
+    </text>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1008.29,676 -1008.29,676 -880,676 -880,1516 -975.29,1516 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-982.79,1516 -972.79,1511 -975.29,1516 -972.79,1521 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1009.08,816 -1009.08,816 -880,816 -880,1516 -976.264,1516 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-983.764,1516 -973.764,1511 -976.264,1516 -973.764,1521 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1280" y="165.532" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1148" y="208.382">
+        <tspan x="-1148" y="208.382">run_session</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1016,201.532 -1016,200 -860,200 -860,1236 -976.264,1236 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-983.764,1236 -973.764,1231 -976.264,1236 -973.764,1241 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1396,423.532 -1310,423.532 -1310,219.532 -1289.74,219.532 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1282.24,219.532 -1292.24,224.532 -1289.74,219.532 -1292.24,214.532 "/>
+    </g>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1401.86" y="411.39">
+      <tspan x="-1401.86" y="411.39">logon</tspan>
+    </text>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1396" y="459.532">
+      <tspan x="-1396" y="459.532">login</tspan>
+    </text>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1147.7" y="8.8064">
+      <tspan x="-1147.7" y="8.8064">repeat login</tspan>
+    </text>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1015.7,-21.1936 -994.702,-21.1936 -994.702,145.532 -1301,145.532 -1301,201.532 -1289.74,201.532 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1282.24,201.532 -1292.24,206.532 -1289.74,201.532 -1292.24,196.532 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1643.45" y="1040" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1511.45" y="1082.85">
+        <tspan x="-1511.45" y="1082.85">from_child_cb</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1240,1076 -1309.72,1076 -1309.72,1076 -1369.71,1076 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1377.21,1076 -1367.21,1071 -1369.71,1076 -1367.21,1081 "/>
+    </g>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1309.72" y="1076">
+      <tspan x="-1309.72" y="1076">GIO</tspan>
+    </text>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1385.31,1045.86 -1320,1045.86 -1320,-39.1936 -1289.44,-39.1936 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1281.94,-39.1936 -1291.94,-34.1936 -1289.44,-39.1936 -1291.94,-44.1936 "/>
+    </g>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1511.45" y="1132">
+      <tspan x="-1511.45" y="1132">session-child emit</tspan>
+    </text>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-1676.75" y="285.532" width="297.5" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-1528" y="328.382">
+        <tspan x="-1528" y="328.382">seat_lockswitch_authentication_complete_cb</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" points="-1379.25,321.532 -1340,321.532 -1340,-178.468 -1289.74,-178.468 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-1282.24,-178.468 -1292.24,-173.468 -1289.74,-178.468 -1292.24,-183.468 "/>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" points="-1528,1480 -1528,1371.95 -1153.64,1371.95 "/>
+      <polygon style="fill: #ff0000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" fill-rule="evenodd" points="-1146.14,1371.95 -1156.14,1376.95 -1153.64,1371.95 -1156.14,1366.95 "/>
+    </g>
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e5e5e5" x="-2640" y="1360" width="776.55" height="280" rx="0" ry="0"/>
+    <text font-size="25.2194" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2640" y="1360">
+      <tspan x="-2640" y="1360">session-child.c</tspan>
+    </text>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #e6e6fa" x="-2580" y="1404.63" width="264" height="72" rx="20" ry="20"/>
+      <text font-size="12.8" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2448" y="1447.48">
+        <tspan x="-2448" y="1447.48">session_child_run</tspan>
+      </text>
+    </g>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke-dasharray: 4; stroke: #1e90ff" points="-976,1076 -940,1076 -940,1440 -2040,1440 -2040,1440.63 -2306.26,1440.63 "/>
+      <polygon style="fill: #1e90ff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #1e90ff" fill-rule="evenodd" points="-2313.76,1440.63 -2303.76,1435.63 -2306.26,1440.63 -2303.76,1445.63 "/>
+    </g>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-976" y="1094">
+      <tspan x="-976" y="1094">pipe</tspan>
+    </text>
+    <text font-size="12.8" style="fill: #1e90ff; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="-2316" y="1458.63">
+      <tspan x="-2316" y="1458.63">from main function</tspan>
+      <tspan x="-2316" y="1474.63">--session-child</tspan>
+    </text>
+    <g>
+      <polyline style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" points="-1118,1339.55 -1118,1296 -1118,1296 -1118,1281.74 "/>
+      <polygon style="fill: #ff0000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #ff0000" fill-rule="evenodd" points="-1118,1274.24 -1113,1284.24 -1118,1281.74 -1123,1284.24 "/>
+    </g>
+  </g>
+</svg>
+<h1><li>Markdown&#x5D4C;&#x5957;svg&#x4EE5;&#x53CA;UML&#x8F6F;&#x4EF6;dia&#x5BF9;svg&#x7684;&#x652F;&#x6301;</li></h1>
+<ol>
+<li>
+<h2>SVG&#x53C2;&#x8003;&#x6587;&#x6863;</h2>
+<ol>
+<li><a href="https://www.runoob.com/svg/svg-reference.html">&#x6240;&#x6709;&#x7684;SVG&#x5143;&#x7D20;&#x5C5E;&#x6027;API</a></li>
+<li><a href="https://www.w3school.com.cn/svg/index.asp">W3School&#x6559;&#x7A0B;</a></li>
+<li><a href="https://www.bejson.com/ui/svg_editor/">SVG&#x4EE3;&#x7801;&#x5728;&#x7EBF;&#x9884;&#x89C8;</a></li>
+<li><a href="https://www.aconvert.com/cn/format/svg/">&#x5176;&#x5B83;&#x56FE;&#x50CF;&#x683C;&#x5F0F;&#x4E0E;SVG&#x4E92;&#x8F6C;&#x5728;&#x7EBF;&#x5DE5;&#x5177;</a></li>
+<li><a href="https://c.runoob.com/more/svgeditor/">&#x5728;&#x7EBF;&#x8BBE;&#x8BA1;&#x5DE5;&#x5177;1</a></li>
+<li><a href="http://www.86y.org/demo/svg/">&#x5728;&#x7EBF;&#x8BBE;&#x8BA1;&#x5DE5;&#x5177;2</a></li>
+</ol>
+</li>
+<li>
+<h2>UML&#x5DE5;&#x5177;Dia</h2>
+</li>
+</ol>
+</ol>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>
