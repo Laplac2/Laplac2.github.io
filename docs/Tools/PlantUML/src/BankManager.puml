@@ -1,0 +1,39 @@
+@startuml
+title Bank Manager类图
+class Account{
+    -string id
+    -double balance
+    {static}-double total
+    #record()
+    #error()
+    +getID()
+    +getBalance()
+    +getTotal()
+    +show()
+}
+' note bottom: Account
+class SavingAccount{
+    - Accumulator acc
+    - double rate
+    + getRate()
+    {static}+double getTotal()
+    + void deposit()
+    + void withdraw()
+    + void settle()
+    + void show()
+}
+class CreditAccount{
+    - Accumulator acc
+    - double rate
+}
+class Accumulator{
+    - Date lastDate
+    - double value
+    - double sum
+    + double getSum()
+    + void change()
+    + void reset()
+}
+SavingAccount-|>Account
+CreditAccount-|>Account
+@enduml

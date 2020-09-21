@@ -1,0 +1,10 @@
+@startuml
+title C++ 类图
+class A{
+	- String field
+	+ A()
+	# void method()
+}
+note right: 这是测试类 A
+
+@enduml
