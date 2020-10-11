@@ -1,0 +1,12 @@
+﻿UDS诊断入门
+https://blog.csdn.net/u012252959/article/details/83063899
+
+使用 Sublime + PlantUML 高效地画图
+https://www.jianshu.com/p/e92a52770832
+
+机器学习
+https://blog.csdn.net/hongbin_xu/column/info/21465
+http://www.ai-start.com/
+
+吴恩达
+https://www.coursera.org/instructor/andrewng
