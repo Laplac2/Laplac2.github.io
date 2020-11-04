@@ -17,6 +17,12 @@
 
 ## 命令
 
+### git clone
+
+```bash
+git clone url directory-name # 将拉下来的仓库文件夹重命名
+```
+
 ### git add
 
 ```bash
