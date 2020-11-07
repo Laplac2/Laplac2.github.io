@@ -17,7 +17,6 @@
 ## Linux
 
 - [Linux](Linux/linux.md)
-- [System Partition for Linux](Linux/system-partition.md)
 
 ## LightDM
 
