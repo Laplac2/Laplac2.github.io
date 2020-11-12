@@ -2,7 +2,7 @@
 
 - [Configure](#configure)
   - [vscode+go](#vscodego)
-  - [golang](#golang)
+  - [goland](#goland)
 - [Reference](#reference)
 
 ## Configure
@@ -233,13 +233,11 @@
    > 如果执行上述命令的时候提示找不到包，有两种可能性：一种是它拉取代码的仓库错了，可以直接去 github 上搜那个缺失的工具包名，按照报错的路径将拉下来代码放在那里，然后再执行上述命令。第二种就是单纯的路径错了，按照提示的，将代码放在正确的路径就好了。
    > 上述工具包安装过程中可能会提示 `undefined: strings.ReplaceAll` 等类似问题，这属于 go 的版本升级过程中的问题，不过问题不大，暂时先忽略。
 
-### golang
+### goland
 
-前两步与 vscode 配置相同，然后安装 golang 就可以了。
+前两步与 vscode 配置相同，然后安装 goland 就可以了。
 
-```bash
-sudo apt install golang
-```
+goland 官网下载地址：<https://www.jetbrains.com/go/>
 
 ## Reference
 
