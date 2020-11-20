@@ -2,6 +2,7 @@
 
 - [简介](#简介)
 - [命令](#命令)
+  - [git clone](#git-clone)
   - [git add](#git-add)
   - [git commit](#git-commit)
   - [git pull](#git-pull)
@@ -11,6 +12,9 @@
   - [git remote](#git-remote)
   - [git cherry-pick](#git-cherry-pick)
   - [git diff](#git-diff)
+- [进阶操作](#进阶操作)
+  - [忽略更改](#忽略更改)
+  - [设置跟踪关系](#设置跟踪关系)
 - [Reference](#reference)
 
 ## 简介
@@ -80,7 +84,9 @@ commit_B: 需要导出位置的提交的 hash 值。
 `git diff commit_A commit_B > pach.pach`
 注：导出的 pach 文件是两个提交信息之间所有的差异。
 
-## 忽略更改
+## 进阶操作
+
+### 忽略更改
 
 - `.gitignore`
   - 说明：显式地阻止提交文件。
@@ -110,7 +116,25 @@ commit_B: 需要导出位置的提交的 hash 值。
   git update-index --assume-unchanged
   ```
 
+### 设置跟踪关系
+
+- 新建一个分支并设置跟踪关系
+
+  ```bash
+  git checkout -b new_branch_name [--track] origin/remote_branch_name # --track 选项可以省略
+  ```
+
+- 设置已有分支和远端分支的跟踪关系
+
+  ```bash
+  git branch -u origin/remote_branch_name local_branch_name
+  ```
+
+  > -u 选项是 --set-upstream-to 的简写；
+  > local_branch_name 可以省略，默认值为当前分支。
+
 ## Reference
 
 - [git 思维导图](git思维导图.pdf)
 - [Git 小技巧 - 忽略不想要提交的本地修改](https://mengqi92.github.io/2020/07/17/hide-files-from-git/)
+- [设置 git 分支的跟踪关系](https://blog.csdn.net/big_thinker/article/details/52664710)
