@@ -13,6 +13,10 @@
   - [git cherry-pick](#git-cherry-pick)
   - [git diff](#git-diff)
 - [进阶操作](#进阶操作)
+  - [Git global setup](#git-global-setup)
+  - [Create a new repository](#create-a-new-repository)
+  - [Push an existing folder](#push-an-existing-folder)
+  - [Push an existing Git repository](#push-an-existing-git-repository)
   - [忽略更改](#忽略更改)
   - [设置跟踪关系](#设置跟踪关系)
 - [Reference](#reference)
@@ -86,6 +90,45 @@ commit_B: 需要导出位置的提交的 hash 值。
 
 ## 进阶操作
 
+### Git global setup
+
+```bash
+git config --global user.name "xxx"
+git config --global user.email "xxx@zzz.com"
+```
+
+### Create a new repository
+
+```bash
+git clone git@github.com:xxx/xyz.git
+cd xyz
+touch README.md
+git add README.md
+git commit -m "add README"
+git push -u origin master
+```
+
+### Push an existing folder
+
+```bash
+cd existing_folder
+git init
+git remote add origin git@github.com:xxx/xyz.git
+git add .
+git commit -m "Initial commit"
+git push -u origin master
+```
+
+### Push an existing Git repository
+
+```bash
+cd existing_repo
+git remote rename origin old-origin
+git remote add origin git@github.com:xxx/xyz.git
+git push -u origin --all
+git push -u origin --tags
+```
+
 ### 忽略更改
 
 - `.gitignore`
@@ -128,6 +171,8 @@ commit_B: 需要导出位置的提交的 hash 值。
 
   ```bash
   git branch -u origin/remote_branch_name local_branch_name
+  # or
+  git branch --set-upstream-to=origin/branch_name local_branch_name
   ```
 
   > -u 选项是 --set-upstream-to 的简写；
