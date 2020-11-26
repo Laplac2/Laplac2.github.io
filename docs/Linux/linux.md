@@ -12,6 +12,7 @@
 ## 2 命令
 
 - [dd](dd.md)
+- [crontab](crontab.md)
 - [scp](scp.md)
 - [rsync](rsync.md)
 - [wget](wget.md)
@@ -34,4 +35,3 @@
 ## 6 Reference
 
 - [https://www.cnblogs.com/peida/tag/](https://www.cnblogs.com/peida/tag/)
-- [Linux Probe](LinuxProbe.pdf)
