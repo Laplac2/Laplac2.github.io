@@ -61,7 +61,6 @@
   /usr/local/include # 默认安装头文件所在目录
   ```
 
-> [Tips]
 > 建议先用 apt 命令安装一遍，将依赖都装好，再装源码玩，可以避免后面缺依赖的问题。
 > 在64位操作系统下需要 libunwind 支持，如果没有安装 libunwind，还要先编译安装 libunwind。
 > libunwind 安装版本要是 0.99-beta，不然可能有未知问题。
