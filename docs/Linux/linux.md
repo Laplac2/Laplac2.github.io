@@ -17,6 +17,7 @@
 - [rsync](rsync.md)
 - [wget](wget.md)
 - [lsattr](lsattr.md)
+- [ldd](ldd.md)
 
 ## 3 环境变量
 
