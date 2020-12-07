@@ -245,7 +245,7 @@ CPU性能监测：
       go tool pprof <path/to/profile>
       ```
 
-      ![cpuprofile](images/cpuprofile.png)
+      ![cpuprofiler](images/cpuprofiler.png)
 
 ## 4 参考文献
 
