@@ -25,7 +25,7 @@
 
 ## 4 个性化操作
 
-- [System Partition for Linux](Linux/system-partition.md)
+- [System Partition for Linux](system-partition.md)
 - [Move System Postion](system-move.md)
 - [Install Graphics Driver](graphics-driver.md)
 
