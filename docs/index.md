@@ -47,3 +47,7 @@
 - [Visual Studio Code](Tools/VSCode/vscode.md)
 - [VMware Workstation](Tools/VMwareWorkstation/vmware-workstation.md)
 - [TensorFlow](Tools/TensorFlow/tensorflow.md)
+
+## Design Pattern
+
+- [Singleton Pattern](DesignPattern/SingletonPattern/singleton_pattern.md)

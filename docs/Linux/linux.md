@@ -18,6 +18,7 @@
 - [wget](wget.md)
 - [lsattr](lsattr.md)
 - [ldd](ldd.md)
+- [ln](ln.md)
 
 ## 3 环境变量
 

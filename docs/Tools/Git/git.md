@@ -1,37 +1,42 @@
 # Git
 
-- [简介](#简介)
-- [命令](#命令)
-  - [git clone](#git-clone)
-  - [git add](#git-add)
-  - [git commit](#git-commit)
-  - [git pull](#git-pull)
-  - [git push](#git-push)
-  - [git fetch](#git-fetch)
-  - [git rebase](#git-rebase)
-  - [git remote](#git-remote)
-  - [git cherry-pick](#git-cherry-pick)
-  - [git diff](#git-diff)
-- [进阶操作](#进阶操作)
-  - [Git global setup](#git-global-setup)
-  - [Create a new repository](#create-a-new-repository)
-  - [Push an existing folder](#push-an-existing-folder)
-  - [Push an existing Git repository](#push-an-existing-git-repository)
-  - [忽略更改](#忽略更改)
-  - [设置跟踪关系](#设置跟踪关系)
-- [Reference](#reference)
+- [1 简介](#1-简介)
+- [2 命令](#2-命令)
+  - [2.1 git clone](#21-git-clone)
+  - [2.2 git add](#22-git-add)
+  - [2.3 git commit](#23-git-commit)
+  - [2.4 git pull](#24-git-pull)
+  - [2.5 git push](#25-git-push)
+  - [2.6 git fetch](#26-git-fetch)
+  - [2.7 git rebase](#27-git-rebase)
+  - [2.8 git remote](#28-git-remote)
+  - [2.9 git cherry-pick](#29-git-cherry-pick)
+  - [2.10 git diff](#210-git-diff)
+  - [2.11 git log](#211-git-log)
+  - [2.12 git show](#212-git-show)
+  - [2.13 git branch](#213-git-branch)
+- [3 进阶操作](#3-进阶操作)
+  - [3.1 Git global setup](#31-git-global-setup)
+  - [3.2 Create a new repository](#32-create-a-new-repository)
+  - [3.3 Push an existing folder](#33-push-an-existing-folder)
+  - [3.4 Push an existing Git repository](#34-push-an-existing-git-repository)
+  - [3.5 忽略更改](#35-忽略更改)
+  - [3.6 设置跟踪关系](#36-设置跟踪关系)
+  - [3.7 通过哈希值查找提交](#37-通过哈希值查找提交)
+  - [3.8 修改分支名](#38-修改分支名)
+- [4 Reference](#4-reference)
 
-## 简介
+## 1 简介
 
-## 命令
+## 2 命令
 
-### git clone
+### 2.1 git clone
 
 ```bash
 git clone url directory-name # 将拉下来的仓库文件夹重命名
 ```
 
-### git add
+### 2.2 git add
 
 ```bash
 git add .
@@ -39,39 +44,42 @@ git add file-path-name
 git add --patch file-path-name  #
 ```
 
-### git commit
+### 2.3 git commit
 
 ```bash
 git commit --amend
 git commit --no-edit
+git commit --amend --edit
+git commit --fixup=<Hash>
 ```
 
-### git pull
+### 2.4 git pull
 
 ```bash
-git pull origin --rebase
+git pull origin --rebase # 拉取远程分支并 rebase
 ```
 
-### git push
+### 2.5 git push
 
 ```bash
 git push -f origin
+git push --delete origin <branch> # 删除远程分支
 ```
 
-### git fetch
+### 2.6 git fetch
 
 ```bash
 git fetch orgin
 ```
 
-### git rebase
+### 2.7 git rebase
 
 ```bash
-git rebase -i hash
-git rebase --autosquash -i hash
+git rebase -i <Hash>
+git rebase --autosquash -i <Hash>
 ```
 
-### git remote
+### 2.8 git remote
 
 ```bash
 git remote -v
@@ -79,25 +87,35 @@ git remote show origin
 git remote prune origin
 ```
 
-### git cherry-pick
+### 2.9 git cherry-pick
 
-### git diff
+### 2.10 git diff
 
 commit_A: 前一次提交的 hash 值。
 commit_B: 需要导出位置的提交的 hash 值。
 `git diff commit_A commit_B > pach.pach`
 注：导出的 pach 文件是两个提交信息之间所有的差异。
 
-## 进阶操作
+### 2.11 git log
 
-### Git global setup
+### 2.12 git show
+
+### 2.13 git branch
+
+```bash
+git branch -m <old name> <new name> # 修改本地分支名
+```
+
+## 3 进阶操作
+
+### 3.1 Git global setup
 
 ```bash
 git config --global user.name "xxx"
 git config --global user.email "xxx@zzz.com"
 ```
 
-### Create a new repository
+### 3.2 Create a new repository
 
 ```bash
 git clone git@github.com:xxx/xyz.git
@@ -108,7 +126,7 @@ git commit -m "add README"
 git push -u origin master
 ```
 
-### Push an existing folder
+### 3.3 Push an existing folder
 
 ```bash
 cd existing_folder
@@ -119,7 +137,7 @@ git commit -m "Initial commit"
 git push -u origin master
 ```
 
-### Push an existing Git repository
+### 3.4 Push an existing Git repository
 
 ```bash
 cd existing_repo
@@ -129,7 +147,7 @@ git push -u origin --all
 git push -u origin --tags
 ```
 
-### 忽略更改
+### 3.5 忽略更改
 
 - `.gitignore`
   - 说明：显式地阻止提交文件。
@@ -159,7 +177,7 @@ git push -u origin --tags
   git update-index --assume-unchanged
   ```
 
-### 设置跟踪关系
+### 3.6 设置跟踪关系
 
 - 新建一个分支并设置跟踪关系
 
@@ -178,7 +196,22 @@ git push -u origin --tags
   > -u 选项是 --set-upstream-to 的简写；
   > local_branch_name 可以省略，默认值为当前分支。
 
-## Reference
+### 3.7 通过哈希值查找提交
+
+```bash
+git log <Hash>
+git show <Hash>
+```
+
+### 3.8 修改分支名
+
+```bash
+git push --delete origin <branch>   # 删除远程分支
+git branch -m <old name> <new name> # 修改本地分支名
+git push origin <new branch>        # 推送本地分支
+```
+
+## 4 Reference
 
 - [git 思维导图](git思维导图.pdf)
 - [Git 小技巧 - 忽略不想要提交的本地修改](https://mengqi92.github.io/2020/07/17/hide-files-from-git/)

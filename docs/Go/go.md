@@ -7,13 +7,27 @@
 
 ## Configure
 
+```bash
+# .bashrc
+export GOPATH=$HOME/gocode:/usr/share/gocode    # go 相关工具包和源码存储的路径
+export GOROOT=/usr/local/go                     # 官网下载的 go 安装目录
+export PATH=$HOME/gocode/bin:$GOROOT/bin:$PATH  # 添加相关可执行文件的路径到环境变量中
+export GO111MODULE=on
+export GOPROXY=https://goproxy.cn,direct
+# 安装编译依赖
+sudo mk-build-deps --install # 这个命令通过本地 debian/control 的依赖生成一个元包，元包依赖当前项目的编译依赖，安装元包即可安装好编译依赖。
+sudo apt build-dep xxx
+```
+
+> 如果 `make` 的时候提示编译失败，xxx 包找不到，而代码没问题，依赖也都装了，可以考虑设置 `export GO111MODULE=off`
+
 ### vscode+go
 
 1. 安装工程相关依赖
 
    ```bash
-   sudo apt build-dep startdde dde-daemon
    sudo apt install golang-go
+   sudo apt build-dep startdde dde-daemon
    ```
 
 2. 配置 go 的环境变量
