@@ -3,6 +3,8 @@
 - [Configure](#configure)
   - [vscode+go](#vscodego)
   - [goland](#goland)
+- [关键字](#关键字)
+  - [defer](#defer)
 - [Reference](#reference)
 
 ## Configure
@@ -253,6 +255,12 @@ sudo apt build-dep xxx
 
 goland 官网下载地址：<https://www.jetbrains.com/go/>
 
+## 关键字
+
+### defer
+
+函数返回前调用
+
 ## Reference
 
 - [从零开始搭建 Go 语言开发环境](https://www.liwenzhou.com/posts/Go/install_go_dev/)
@@ -261,3 +269,4 @@ goland 官网下载地址：<https://www.jetbrains.com/go/>
 - [后端开发环境配置](https://wikidev.uniontech.com/index.php?title=%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE)
 - [golang undefined: strings.ReplaceAll 解决](https://blog.csdn.net/vah101/article/details/102615415)
 - [Crack JetBrains](https://macwk.com/article/jetbrains-crack)
+- [Go 语言设计与实现](https://draveness.me/golang/)
