@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Laplace">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1 概述单例模式 (Singleton Pattern，也称为单件模式)，是为了保证一个类仅有一个实例，并提供一个访问它的全局访问点，该实例被所有程序模块共享。  定义一个单例类：  私有化它的构造函数和析构函数，防止外界创建单例类的对象； 私有化或者删除它的拷贝构造函数； 使用类的私有静态指针变量指向类的唯一实例； 使用一个公有的静态方法获取该实例。   使用场景：  要求生产唯一序列号； WE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Singleton Pattern">
+<meta property="og:url" content="https://laplac2.github.io/design-pattern/singleton/index.html">
+<meta property="og:site_name" content="Laplace&#39;s blog">
+<meta property="og:description" content="1 概述单例模式 (Singleton Pattern，也称为单件模式)，是为了保证一个类仅有一个实例，并提供一个访问它的全局访问点，该实例被所有程序模块共享。  定义一个单例类：  私有化它的构造函数和析构函数，防止外界创建单例类的对象； 私有化或者删除它的拷贝构造函数； 使用类的私有静态指针变量指向类的唯一实例； 使用一个公有的静态方法获取该实例。   使用场景：  要求生产唯一序列号； WE">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-19T02:31:00.000Z">
+<meta property="article:modified_time" content="2024-01-16T16:09:24.273Z">
+<meta property="article:author" content="Laplace">
+<meta property="article:tag" content="CPP">
+<meta property="article:tag" content="DesignPattern">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Singleton Pattern - Laplace&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"laplac2.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Laplace&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/0.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Singleton Pattern"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-19 10:31" pubdate>
+          2022年4月19日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Singleton Pattern</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><p>单例模式 (Singleton Pattern，也称为单件模式)，是为了保证一个类仅有一个实例，并提供一个访问它的全局访问点，该实例被所有程序模块共享。</p>
+<ul>
+<li><p>定义一个单例类：</p>
+<ol>
+<li>私有化它的构造函数和析构函数，防止外界创建单例类的对象；</li>
+<li>私有化或者删除它的拷贝构造函数；</li>
+<li>使用类的私有静态指针变量指向类的唯一实例；</li>
+<li>使用一个公有的静态方法获取该实例。</li>
+</ol>
+</li>
+<li><p>使用场景：</p>
+<ol>
+<li>要求生产唯一序列号；</li>
+<li>WEB 中的计数器，不用每次刷新都在数据库里加一次，用单例先缓存起来；</li>
+<li>创建对象需要消耗的资源过多，比如 I&#x2F;O 与数据库的连接等。</li>
+</ol>
+</li>
+<li><p>优点：</p>
+<ol>
+<li>在内存中只有一个实例，减少了内存的开销，尤其是在频繁的创建和销毁实例的场景下；</li>
+<li>避免对资源的多重占用。</li>
+</ol>
+</li>
+<li><p>缺点</p>
+<ol>
+<li>不能继承；</li>
+<li>与单一原则冲突（一个类应该之关心内部逻辑，而不关系外面怎么实例化）。</li>
+</ol>
+</li>
+</ul>
+<p>在 C++11 之前需要考虑多线程情况下的安全问题，可通过同步锁解决，防止多线程同时进入造成多次实例化。</p>
+<h2 id="2-Lazy-Singleton"><a href="#2-Lazy-Singleton" class="headerlink" title="2 Lazy Singleton"></a>2 Lazy Singleton</h2><p>单例实例在第一次使用时才进行初始化，如果没有地方用，单例也就不会实例话，相当于没用。</p>
+<h3 id="2-1-基础版"><a href="#2-1-基础版" class="headerlink" title="2.1 基础版"></a>2.1 基础版</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span><br>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">static</span> Singleton *instance;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-built_in">Singleton</span>() &#123;&#125;<br>    <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton &amp;) = <span class="hljs-keyword">delete</span>;<br>    ~<span class="hljs-built_in">Singleton</span>() &#123;&#125;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> Singleton *<span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">if</span> (instance == <span class="hljs-literal">nullptr</span>)<br>        &#123;<br>            instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Singleton</span>();<br>        &#125;<br>        <span class="hljs-keyword">return</span> instance;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>这种方式理解简单，所以也被称为教学版，但是存在线程不安全的问题。当多个线程同时使用单例时，可能存在第一次初始化几个实例的问题。</p>
+<h3 id="2-2-升级版"><a href="#2-2-升级版" class="headerlink" title="2.2 升级版"></a>2.2 升级版</h3><ul>
+<li>使用智能指针</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span><br>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">static</span> std::unique_ptr&lt;Singleton&gt; singleton;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-built_in">Singleton</span>() &#123;&#125;<br>    <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton &amp;) = <span class="hljs-keyword">delete</span>;<br>    ~<span class="hljs-built_in">Singleton</span>() &#123;&#125;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> std::unique_ptr&lt;Singleton&gt; &amp;<span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">if</span> (singleton == <span class="hljs-literal">nullptr</span>)<br>        &#123;<br>            singleton = std::<span class="hljs-built_in">make_unique</span>&lt;Singleton&gt;(<span class="hljs-keyword">new</span> Singleton);<br>        &#125;<br>        <span class="hljs-keyword">return</span> singleton;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>使用静态的嵌套类对象</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span><br>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">static</span> Singleton *instance;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Deletor</span><br>    &#123;<br>    <span class="hljs-keyword">public</span>:<br>        ~<span class="hljs-built_in">Deletor</span>()<br>        &#123;<br>            <span class="hljs-keyword">if</span> (Singleton::instance != <span class="hljs-literal">nullptr</span>)<br>            &#123;<br>                <span class="hljs-keyword">delete</span> Singleton::instance;<br>            &#125;<br>        &#125;<br>    &#125;;<br>    <span class="hljs-type">static</span> Deletor deletor;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-built_in">Singleton</span>() &#123;&#125;<br>    <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton &amp;) = <span class="hljs-keyword">delete</span>;<br>    ~<span class="hljs-built_in">Singleton</span>() &#123;&#125;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> Singleton *<span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">if</span> (instance == <span class="hljs-literal">nullptr</span>)<br>        &#123;<br>            instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Singleton</span>();<br>        &#125;<br>        <span class="hljs-keyword">return</span> instance;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>初始化时，在单例类内定义私有的专门用于释放的静态成员<code>deletor</code>，当程序运行结束时，利用程序在结束时析构全局变量的特性，系统会调用静态成员<code>deletor</code>的析构函数，该析构函数会删除单例的唯一实例，解决了内存泄漏的问题。</p>
+<p>这个方式在单线程环境下是正确的，但是拿到多线程环境下就会出现 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Race_condition">race condition</a>，要使其能在多线程环环境下正常，可以考虑加锁。</p>
+<h3 id="2-3-进阶版"><a href="#2-3-进阶版" class="headerlink" title="2.3 进阶版"></a>2.3 进阶版</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span><br>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">static</span> Singleton *instance;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-built_in">Singleton</span>() &#123;&#125;<br>    <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton &amp;);<br>    ~<span class="hljs-built_in">Singleton</span>() &#123;&#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Deletor</span><br>    &#123;<br>    <span class="hljs-keyword">public</span>:<br>        ~<span class="hljs-built_in">Deletor</span>()<br>        &#123;<br>            <span class="hljs-keyword">if</span> (Singleton::instance != <span class="hljs-literal">nullptr</span>)<br>            &#123;<br>                <span class="hljs-keyword">delete</span> Singleton::instance;<br>            &#125;<br>        &#125;<br>    &#125;;<br>    <span class="hljs-type">static</span> Deletor deletor;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> Singleton *<span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">if</span> (instance == <span class="hljs-literal">nullptr</span>)<br>        &#123;<br>            Lock lock; <span class="hljs-comment">// 基于作用域的加锁，超出作用域，自动调用析构函数解锁</span><br>            <span class="hljs-keyword">if</span> (instance == <span class="hljs-literal">nullptr</span>)<br>            &#123;<br>                instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Singleton</span>();<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> instance;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>线程安全问题仅出现在第一次初始化的时候，后面获取该实例的时候并不会遇到，也就没有必要再使用 lock，因为每次获取锁的状态都是有性能损耗的。</p>
+<p>双检测锁很好地解决了这个问题，它通过加锁前检测是否已经初始化，避免了每次获取实例时都要首先获取锁资源。</p>
+<p>加入 DCL: Double-Checked Locking Pattern 后，其实还是有问题的，关于 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Memory_model_(programming)">memory model</a>。</p>
+<p>在某些内存模型中或者是由于编译器的优化以及运行时优化等原因，使得 instance 虽然已经不是 nullptr 但是其所指对象还没有完成构造，这种情况下，另一个线程如果调用<code>getInstance()</code>就有可能使用到一个不完全初始化的对象。换句话说，就是代码中：<code>if(instance == NULL)</code>和<code>instance = new Singleton();</code>没有正确的同步，在某种情况下会出现<code>new</code>返回了地址赋值给<code>instance</code>变量而<code>Singleton</code>此时还没有构造完全，当另一个线程随后运行到<code>if(instance == NULL)</code>时将不会进入，从而返回了不完全的实例对象给用户使用，造成了严重的错误。在 C++11 没有出来的时候，只能靠插入两个 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Memory_barrier">memory barrier</a> 来解决这个错误，但是 C++11 引进了 memory model，提供了 Atomic 实现内存的同步访问，即不同线程总是获取对象修改前或修改后的值，无法在对象修改期间获得该对象。</p>
+<p>因此，在有了 C++11 后就可以正确的跨平台的实现 DCL 模式了，利用 atomic，代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp">atomic&lt;Widget *&gt; Widget::pInstance&#123;<span class="hljs-literal">nullptr</span>&#125;;<br><span class="hljs-function">Widget *<span class="hljs-title">Widget::Instance</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span> (pInstance == <span class="hljs-literal">nullptr</span>)<br>    &#123;<br>        lock_guard&lt;mutex&gt; lock&#123;mutW&#125;;<br>        <span class="hljs-keyword">if</span> (pInstance == <span class="hljs-literal">nullptr</span>)<br>        &#123;<br>            pInstance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Widget</span>();<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> pInstance;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>C++11 中的 atomic 类的默认<code>memory_order_seq_cst</code>保证了 5、10 行代码的正确同步，由于上面的 atomic 需要一些性能上的损失，因此我们可以写一个优化的版本：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp">atomic&lt;Widget *&gt; Widget::pInstance&#123;<span class="hljs-literal">nullptr</span>&#125;;<br><span class="hljs-function">Widget *<span class="hljs-title">Widget::Instance</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    Widget *p = pInstance;<br>    <span class="hljs-keyword">if</span> (p == <span class="hljs-literal">nullptr</span>)<br>    &#123;<br>        lock_guard&lt;mutex&gt; lock&#123;mutW&#125;;<br>        <span class="hljs-keyword">if</span> ((p = pInstance) == <span class="hljs-literal">nullptr</span>)<br>        &#123;<br>            pInstance = p = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Widget</span>();<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> p;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-Eager-Singleton"><a href="#3-Eager-Singleton" class="headerlink" title="3 Eager Singleton"></a>3 Eager Singleton</h2><p>单例实例在程序运行时被立即执行初始化。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span><br>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">static</span> Singleton instance;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-built_in">Singleton</span>() &#123;&#125;<br>    ~<span class="hljs-built_in">Singleton</span>() &#123;&#125;<br>    <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton &amp;);<br>    Singleton &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton &amp;);<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> Singleton &amp;<span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">return</span> instance;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>由于在 main 函数之前初始化，所以没有线程安全的问题。但是潜在问题在于 no-local static 对象（函数外的 static 对象）在不同编译单元中的初始化顺序是未定义的。也即<code>static Singleton instance;</code>和<code>static Singleton&amp; getInstance();</code>二者的初始化顺序不确定，如果在初始化完成之前调用<code>getInstance()</code>方法会返回一个未定义的实例。</p>
+<h2 id="4-Meyers-Singleton"><a href="#4-Meyers-Singleton" class="headerlink" title="4 Meyers Singleton"></a>4 Meyers Singleton</h2><p>综上所述，在 C++11 以上版本时，用下列方式是最完美的解决方案：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span><br>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-built_in">Singleton</span>() &#123;&#125;<br>    ~<span class="hljs-built_in">Singleton</span>() &#123;&#125;<br>    <span class="hljs-built_in">Singleton</span>(<span class="hljs-type">const</span> Singleton &amp;);<br>    Singleton &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Singleton &amp;);<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> Singleton &amp;<span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-type">static</span> Singleton instance;<br>        <span class="hljs-keyword">return</span> instance;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5 总结"></a>5 总结</h2><ul>
+<li>Lazy Singleton 通常需要加锁来保证线程安全；</li>
+<li>Eager Singleton 虽然是线程安全的，但存在潜在问题；</li>
+<li>Meyers Singleton 最优雅，但局部静态变量版本在 C++11 后才是线程安全的。</li>
+</ul>
+<p>单例模式本质就是统一管理一堆全局变量，用命名空间定义一堆静态方法和静态变量也可以实现。</p>
+<h2 id="6-参考文献"><a href="#6-参考文献" class="headerlink" title="6 参考文献"></a>6 参考文献</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/37469260">C++ 单例模式</a></li>
+<li><a target="_blank" rel="noopener" href="https://lday.me/2017/12/02/0018_cpp_atomic_summary/">C++ 内存屏障（内存顺序）总结</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Race_condition">Race condition</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Memory_model_(programming)">Memory model</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Memory_barrier">Memory barrier</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/design-pattern/" class="category-chain-item">design pattern</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CPP/" class="print-no-link">#CPP</a>
+      
+        <a href="/tags/DesignPattern/" class="print-no-link">#DesignPattern</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Singleton Pattern</div>
+      <div>https://laplac2.github.io/design-pattern/singleton/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Laplace</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/design-pattern/mvc/" title="Model View Controller">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Model View Controller</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/tools/rsync/" title="Rsync">
+                        <span class="hidden-mobile">Rsync</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

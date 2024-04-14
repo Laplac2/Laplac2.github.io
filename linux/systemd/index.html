@@ -1,0 +1,808 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Laplace">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1 简介systemd 是 Linux 系统的一组基本构建块。它提供了一个以 PID 1 运行的系统和服务管理器，并启动了系统的其余部分。systemd 提供积极的并行化功能，使用套接字和 D-Bus 激活来启动服务，按需启动守护程序，使用 Linux 控制组跟踪进程，维护安装和自动挂载点以及实现精心设计的基于事务依赖关系的服务控制逻辑。systemd 支持 SysV 和 LSB 初始化脚本，并替">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Systemd">
+<meta property="og:url" content="https://laplac2.github.io/linux/systemd/index.html">
+<meta property="og:site_name" content="Laplace&#39;s blog">
+<meta property="og:description" content="1 简介systemd 是 Linux 系统的一组基本构建块。它提供了一个以 PID 1 运行的系统和服务管理器，并启动了系统的其余部分。systemd 提供积极的并行化功能，使用套接字和 D-Bus 激活来启动服务，按需启动守护程序，使用 Linux 控制组跟踪进程，维护安装和自动挂载点以及实现精心设计的基于事务依赖关系的服务控制逻辑。systemd 支持 SysV 和 LSB 初始化脚本，并替">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://laplac2.github.io/linux/systemd/images/systemd-architecture.png">
+<meta property="article:published_time" content="2021-12-01T12:00:00.000Z">
+<meta property="article:modified_time" content="2024-01-16T16:09:24.278Z">
+<meta property="article:author" content="Laplace">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laplac2.github.io/linux/systemd/images/systemd-architecture.png">
+  
+  
+  
+  <title>Systemd - Laplace&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"laplac2.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Laplace&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/0.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Systemd"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-12-01 20:00" pubdate>
+          2021年12月1日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Systemd</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>systemd 是 Linux 系统的一组基本构建块。它提供了一个以 PID 1 运行的系统和服务管理器，并启动了系统的其余部分。systemd 提供积极的并行化功能，使用套接字和 D-Bus 激活来启动服务，按需启动守护程序，使用 Linux 控制组跟踪进程，维护安装和自动挂载点以及实现精心设计的基于事务依赖关系的服务控制逻辑。systemd 支持 SysV 和 LSB 初始化脚本，并替代 sysvinit。其他部分包括日志记录守护程序，用于控制基本系统配置的实用程序，例如主机名，日期，区域设置，维护已登录用户和正在运行的容器和虚拟机的列表，系统帐户，运行时目录和设置，以及用于管理简单网络的守护程序配置，网络时间同步，日志转发和名称解析。</p>
+<p>Systemd 是 Linux 系统工具，用来启动守护进程，目前已成为大多数发行版的标准配置。但在历史上，Linux 的启动一直采用 init 进程，用下面的命令启动服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo /etc/init.d/apache2 start<br>service apache2 start<br></code></pre></td></tr></table></figure>
+
+<p>这种方法有两个缺点：</p>
+<ul>
+<li>一是启动时间长。init 进程是串行启动，只有前一个进程启动完，才会启动下一个进程。</li>
+<li>二是启动脚本复杂。init 进程只是执行启动脚本，不管其他事情，脚本需要自己处理各种情况，这往往使得脚本变得很长。</li>
+</ul>
+<h2 id="2-争议"><a href="#2-争议" class="headerlink" title="2 争议"></a>2 争议</h2><ul>
+<li><p>优势</p>
+<ol>
+<li>手册文档详细。</li>
+<li>统一用<code>/etc/os-release</code>文件区分各个 Linux 发行版。</li>
+<li>systemd 本来是一个先进的 init 程序，除了管理 daemon 之外，还实现了 socket-activation 来支持按需加载服务。就架构上来说完胜现有的任何系统上的任何服务管理体系。</li>
+<li>启动速度相比与其他 init 程序，会稍快一些。</li>
+<li>迭代迅速，新功能增加很快。</li>
+</ol>
+</li>
+<li><p>争议点</p>
+<ol>
+<li>不遵循 UNIX 原则。UNIX 的哲学是做一件事，并且把它做好，而 systemd 则是把 pid 1 扩张到最大化。</li>
+<li>systemd 在设计之初就不考虑 Linux 以外的平台，不遵循 POSIX 标准，而且很多功能根本就是 Linux 特有的，无法移植到 Linux 之外的平台，这尤其让 BSD 爱好者们很受伤，在 Debian 7 以前，一直维护着 Linux 和 FreeBSD 两个内核，只不过后者没什么人用，Debian 8 为了支持 systemd 不得不放弃支持 Debian kFreeBSD。</li>
+<li>接管了太多设施，如 syslog 被 systemd-journal 取代，crond 也被 systemd 的 timer 单元取代，udev 也准备集成到 systemd 中来，未来甚至还可能取代 &#x2F;etc&#x2F;fstab。尽管这些新的服务大部分都是独立于主进程的，但是还是有整个系统被红帽控制住的感觉（systemd 的作者 Lennart Poettering 就职于红帽，systemd 也主要是红帽的 Fedora 首先在推，OpenSUSE 后面跟随）。这在开源社区看来是件政治不正确的事情。</li>
+<li>有人怀疑 systemd 的可靠程度，然后就是很多管理员以前积攒的脚本全报废了（这也是管理员反对的主因吧）。</li>
+<li>systemd 的作者是 Lennart Poettering，其主要的三个项目是 avahi, PulseAudio, systemd。他和他的小伙伴有这样的特点<ul>
+<li>生产力极高。systemd 以不可思议的速度刷版本号，而且每次更新都有新功能。Linux 的核心服务大部分都很有年头了，systemd 的开发节奏和它们反差甚大。</li>
+<li>代码质量不高。PulseAudio 和 systemd 初期都有巨量的 bug，经过很长时间才达到稳定。对于 systemd 这显然不符合人们的期望。Init 应该由 Linus 这样的靠谱程序员而不是 Poettering 这种傻逼程序员负责。</li>
+<li>频繁变更设计和接口。systemd 的新功能，最好都等几个版本再用。因为 Poettering 似乎是喜欢让用户的实践去打磨他的设计的。</li>
+<li>不考虑向后兼容。Poettering 和小伙伴们有着极端的“只用正确的方法做事”的态度。如果某个用法过去可以工作，但不符合他们心目中“正确的方式”，他们会在新版本中毫不犹豫地将你 break 掉。这种态度屡次遭到 Linus 痛骂（由于 udev 和内核紧密集成）。很多人不喜欢这种以飞速不断生产 bug 和不成熟设计的风格。实际上这更接近商业软件公司（比如微软）的开发风格，而这显然也会招黑。</li>
+</ul>
+</li>
+<li>systemd 极端地奉行“只考虑 Linux”，不接受任何改进非 Linux 系统兼容性的 patch。由于 systemd 项目合并了 udev, logind 等基础设施，以及 Gnome&#x2F;KDE 积极与 systemd 集成，这给其它开源内核的桌面用户（以及 Debian 这样的多内核发行版）造成了困扰。</li>
+<li>对比 sysvinit，系统管理员不喜欢 systemd：<ul>
+<li>systemd 是用 C 而不是系统管理员熟悉的 shell 写成。</li>
+<li>systemd 的核心是单个 binary，而不是一堆脚本和小程序拼凑而成，不符合所谓 The Unix Way。</li>
+<li>喜欢重新发明轮子。systemd 重新发明了一堆历史悠久的核心服务（通常是简化功能和配置）：syslog, ntp, cron, fstab, dhcpcd, vt… 系统管理员更信赖他们熟悉的服务（尽管配置较为复杂）。而重新发明轮子总体上在开源社区是不被赞许的。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="3-概述"><a href="#3-概述" class="headerlink" title="3 概述"></a>3 概述</h2><p>Systemd 就是的设计目标是，为系统的启动和管理提供一套完整的解决方案。根据 Linux 惯例，字母 d 是守护进程（daemon）的缩写。 Systemd 这个名字的含义，就是它要守护整个系统。使用了 Systemd，就不需要再用 init 了。Systemd 取代了 initd，成为系统的第一个进程（PID 等于 1），其他进程都是它的子进程。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl --version <span class="hljs-comment"># 查看 Systemd 的版本</span><br></code></pre></td></tr></table></figure>
+
+<p>Systemd 的优点是功能强大，使用方便，缺点是体系庞大，非常复杂。事实上，现在还有很多人反对使用 Systemd，理由就是它过于复杂，与操作系统的其他部分强耦合，违反 “keep simple, keep stupid” 的 Unix 哲学。</p>
+<p><img src="/linux/systemd/images/systemd-architecture.png" srcset="/img/loading.gif" lazyload alt="Systemd-Architecture"></p>
+<h2 id="4-系统管理"><a href="#4-系统管理" class="headerlink" title="4 系统管理"></a>4 系统管理</h2><p>Systemd 并不是一个命令，而是一组命令，涉及到系统管理的方方面面。</p>
+<h3 id="4-1-systemctl"><a href="#4-1-systemctl" class="headerlink" title="4.1 systemctl"></a>4.1 systemctl</h3><p><code>systemctl</code> 是 Systemd 的主要命令，用于管理系统。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo systemctl reboot       <span class="hljs-comment"># 重启系统</span><br>sudo systemctl poweroff     <span class="hljs-comment"># 关闭系统，切断电源</span><br>sudo systemctl halt         <span class="hljs-comment"># CPU 停止工作</span><br>sudo systemctl <span class="hljs-built_in">suspend</span>      <span class="hljs-comment"># 暂停系统</span><br>sudo systemctl hibernate    <span class="hljs-comment"># 让系统进入冬眠状态</span><br>sudo systemctl hybrid-sleep <span class="hljs-comment"># 让系统进入交互式休眠状态</span><br>sudo systemctl rescue       <span class="hljs-comment"># 启动进入救援状态（单用户状态）</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-2-systemd-analyze"><a href="#4-2-systemd-analyze" class="headerlink" title="4.2 systemd-analyze"></a>4.2 systemd-analyze</h3><p><code>systemd-analyze</code> 命令用于查看启动耗时。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemd-analyze                             <span class="hljs-comment"># 查看启动耗时</span><br>systemd-analyze blame                       <span class="hljs-comment"># 查看每个服务的启动耗时</span><br>systemd-analyze critical-chain              <span class="hljs-comment"># 显示瀑布状的启动过程流</span><br>systemd-analyze critical-chain atd.service  <span class="hljs-comment"># 显示指定服务的启动流</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-3-hostnamectl"><a href="#4-3-hostnamectl" class="headerlink" title="4.3 hostnamectl"></a>4.3 hostnamectl</h3><p><code>hostnamectl</code> 命令用于查看当前主机的信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hostnamectl                         <span class="hljs-comment"># 显示当前主机的信息</span><br>sudo hostnamectl set-hostname xxx   <span class="hljs-comment"># 设置主机名</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-4-localectl"><a href="#4-4-localectl" class="headerlink" title="4.4 localectl"></a>4.4 localectl</h3><p><code>localectl</code> 命令用于查看本地化设置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">localectl                                   <span class="hljs-comment"># 查看本地化设置</span><br>sudo localectl set-locale LANG=en_GB.utf8   <span class="hljs-comment"># 设置本地化参数</span><br>sudo localectl set-keymap en_GB<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-5-timedatectl"><a href="#4-5-timedatectl" class="headerlink" title="4.5 timedatectl"></a>4.5 timedatectl</h3><p><code>timedatectl</code> 命令用于查看当前时区设置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">timedatectl                                     <span class="hljs-comment"># 查看当前时区设置</span><br>timedatectl list-timezones                      <span class="hljs-comment"># 显示所有可用的时区</span><br>sudo timedatectl set-timezone America/New_York  <span class="hljs-comment"># 设置当前时区</span><br>sudo timedatectl set-time YYYY-MM-DD<br>sudo timedatectl set-time HH:MM:SS<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-6-loginctl"><a href="#4-6-loginctl" class="headerlink" title="4.6 loginctl"></a>4.6 loginctl</h3><p><code>loginctl</code> 命令用于查看当前登录的用户。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">loginctl list-sessions      <span class="hljs-comment"># 列出当前 session</span><br>loginctl list-users         <span class="hljs-comment"># 列出当前登录用户</span><br>loginctl show-user ruanyf   <span class="hljs-comment"># 列出显示指定用户的信息</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="5-Unit"><a href="#5-Unit" class="headerlink" title="5 Unit"></a>5 Unit</h2><p>Systemd 可以管理所有系统资源，不同的资源统称为 Unit（单位）。</p>
+<h3 id="5-1-Unit-种类"><a href="#5-1-Unit-种类" class="headerlink" title="5.1 Unit 种类"></a>5.1 Unit 种类</h3><p>Unit 一共分成 12 种。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">Service unit    <span class="hljs-comment"># 系统服务</span><br>Target unit     <span class="hljs-comment"># 多个 Unit 构成的一个组</span><br>Device Unit     <span class="hljs-comment"># 硬件设备</span><br>Mount Unit      <span class="hljs-comment"># 文件系统的挂载点</span><br>Automount Unit  <span class="hljs-comment"># 自动挂载点</span><br>Path Unit       <span class="hljs-comment"># 文件或路径</span><br>Scope Unit      <span class="hljs-comment"># 不是由 Systemd 启动的外部进程</span><br>Slice Unit      <span class="hljs-comment"># 进程组</span><br>Snapshot Unit   <span class="hljs-comment"># Systemd 快照，可以切回某个快照</span><br>Socket Unit     <span class="hljs-comment"># 进程间通信的 socket</span><br>Swap Unit       <span class="hljs-comment"># swap 文件</span><br>Timer Unit      <span class="hljs-comment"># 定时器</span><br></code></pre></td></tr></table></figure>
+
+<p><code>systemctl list-units</code> 命令可以查看当前系统的所有 Unit 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl list-units                        <span class="hljs-comment"># 列出正在运行的 Unit</span><br>systemctl list-units --all                  <span class="hljs-comment"># 列出所有 Unit，包括没有找到配置文件的或者启动失败的</span><br>systemctl list-units --all --state=inactive <span class="hljs-comment"># 列出所有没有运行的 Unit</span><br>systemctl list-units --failed               <span class="hljs-comment"># 列出所有加载失败的 Unit</span><br>systemctl list-units --<span class="hljs-built_in">type</span>=service         <span class="hljs-comment"># 列出所有正在运行的、类型为 service 的 Unit</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-2-Unit-状态"><a href="#5-2-Unit-状态" class="headerlink" title="5.2 Unit 状态"></a>5.2 Unit 状态</h3><p><code>systemctl status</code> 命令用于查看系统状态和单个 Unit 的状态。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl status                                            <span class="hljs-comment"># 显示系统状态</span><br>sysystemctl status bluetooth.service                        <span class="hljs-comment"># 显示单个 Unit 的状态</span><br>systemctl -H root@rhel7.example.com status httpd.service    <span class="hljs-comment"># 显示远程主机的某个 Unit 的状态</span><br></code></pre></td></tr></table></figure>
+
+<p>除了 <code>systemctl</code> 命令，status 还提供了三个查询状态的简单方法，主要供脚本内部的判断语句使用。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo systemctl is-active application.service    <span class="hljs-comment"># 显示某个 Unit 是否正在运行</span><br>sudo systemctl is-failed application.service    <span class="hljs-comment"># 显示某个 Unit 是否处于启动失败状态</span><br>sudo systemctl is-enabled application.service   <span class="hljs-comment"># 显示某个 Unit 服务是否建立了启动链接</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-3-Unit-管理"><a href="#5-3-Unit-管理" class="headerlink" title="5.3 Unit 管理"></a>5.3 Unit 管理</h3><p>对于用户来说，最常用的是下面这些命令，用于启动和停止 Unit（主要是 service）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo systemctl start apache.service                     <span class="hljs-comment"># 立即启动一个服务</span><br>sudo systemctl stop apache.service                      <span class="hljs-comment"># 立即停止一个服务</span><br>sudo systemctl restart apache.service                   <span class="hljs-comment"># 重启一个服务</span><br>sudo systemctl <span class="hljs-built_in">kill</span> apache.service                      <span class="hljs-comment"># 杀死一个服务的所有子进程</span><br>sudo systemctl reload apache.service                    <span class="hljs-comment"># 重新加载一个服务的配置文件</span><br>sudo systemctl daemon-reload                            <span class="hljs-comment"># 重载所有修改过的配置文件</span><br>sudo systemctl show httpd.service                       <span class="hljs-comment"># 显示某个 Unit 的所有底层参数</span><br>sudo systemctl show -p CPUShares httpd.service          <span class="hljs-comment"># 显示某个 Unit 的指定属性的值</span><br>sudo systemctl set-property httpd.service CPUShares=500 <span class="hljs-comment"># 设置某个 Unit 的指定属性</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-4-依赖关系"><a href="#5-4-依赖关系" class="headerlink" title="5.4 依赖关系"></a>5.4 依赖关系</h3><p>Unit 之间存在依赖关系：A 依赖于 B，就意味着 Systemd 在启动 A 的时候，同时会去启动 B。有些依赖是 Target 类型（详见下文），默认不会展开显示。如果要展开 Target，就需要使用 –all 参数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl list-dependencies --all xxx <span class="hljs-comment"># 命令列出一个 Unit 的所有依赖。</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="6-Target"><a href="#6-Target" class="headerlink" title="6 Target"></a>6 Target</h2><p>启动计算机的时候，需要启动大量的 Unit。如果每一次启动，都要一一写明本次启动需要哪些 Unit，显然非常不方便。Systemd 的解决方案就是 Target。<br>简单说，Target 就是一个 Unit 组，包含许多相关的 Unit 。启动某个 Target 的时候，Systemd 就会启动里面所有的 Unit。从这个意义上说，Target 这个概念类似于”状态点”，启动某个 Target 就好比启动到某种状态。<br>传统的 init 启动模式里面，有 RunLevel 的概念，跟 Target 的作用很类似。不同的是，RunLevel 是互斥的，不可能多个 RunLevel 同时启动，但是多个 Target 可以同时启动。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl list-unit-files --<span class="hljs-built_in">type</span>=target         <span class="hljs-comment"># 查看当前系统的所有 Target</span><br>systemctl list-dependencies multi-user.target   <span class="hljs-comment"># 查看一个 Target 包含的所有 Unit</span><br>systemctl get-default<span class="hljs-comment"># 查看启动时的默认 Target</span><br>sudo systemctl set-default multi-user.target    <span class="hljs-comment"># 设置启动时的默认 Target</span><br><span class="hljs-comment"># 切换 Target 时，默认不关闭前一个 Target 启动的进程，systemctl isolate 命令改变这种行为</span><br>sudo systemctl isolate multi-user.target        <span class="hljs-comment"># 关闭前一个 Target 里面所有不属于后一个 Target 的进程</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="7-日志管理"><a href="#7-日志管理" class="headerlink" title="7 日志管理"></a>7 日志管理</h2><p>Systemd 统一管理所有 Unit 的启动日志。带来的好处就是，可以只用 journalctl 一个命令，查看所有日志（内核日志和应用日志）。日志的配置文件是 &#x2F;etc&#x2F;systemd&#x2F;journald.conf。journalctl 功能强大，用法非常多。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo journalctl                                         <span class="hljs-comment"># 查看所有日志（默认情况下 ，只保存本次启动的日志）</span><br>sudo journalctl -k                                      <span class="hljs-comment"># 查看内核日志（不显示应用日志）</span><br>sudo journalctl -b                                      <span class="hljs-comment"># 查看系统本次启动的日志</span><br>sudo journalctl -b -0<br>sudo journalctl -b -1                                   <span class="hljs-comment"># 查看上一次启动的日志（需更改设置）</span><br>sudo journalctl --since=<span class="hljs-string">&quot;2012-10-30 18:17:16&quot;</span>           <span class="hljs-comment"># 查看指定时间的日志</span><br>sudo journalctl --since <span class="hljs-string">&quot;20 min ago&quot;</span><br>sudo journalctl --since yesterday<br>sudo journalctl --since <span class="hljs-string">&quot;2015-01-10&quot;</span> --<span class="hljs-keyword">until</span> <span class="hljs-string">&quot;2015-01-11 03:00&quot;</span><br>sudo journalctl --since 09:00 --<span class="hljs-keyword">until</span> <span class="hljs-string">&quot;1 hour ago&quot;</span><br>sudo journalctl -n                                      <span class="hljs-comment"># 显示尾部的最新 10 行日志</span><br>sudo journalctl -n 20                                   <span class="hljs-comment"># 显示尾部指定行数的日志</span><br>sudo journalctl -f                                      <span class="hljs-comment"># 实时滚动显示最新日志</span><br>sudo journalctl /usr/lib/systemd/systemd                <span class="hljs-comment"># 查看指定服务的日志</span><br>sudo journalctl _PID=1                                  <span class="hljs-comment"># 查看指定进程的日志</span><br>sudo journalctl /usr/bin/bash                           <span class="hljs-comment"># 查看某个路径的脚本的日志</span><br>sudo journalctl _UID=33 --since today                   <span class="hljs-comment"># 查看指定用户的日志</span><br>sudo journalctl -u nginx.service                        <span class="hljs-comment"># 查看某个 Unit 的日志</span><br>sudo journalctl -u nginx.service --since today<br>sudo journalctl -u nginx.service -f                     <span class="hljs-comment"># 实时滚动显示某个 Unit 的最新日志</span><br>sudo journalctl -u nginx.service -u php-fpm.service --since today    <span class="hljs-comment"># 合并显示多个 Unit 的日志</span><br><span class="hljs-comment"># 查看指定优先级（及其以上级别）的日志，共有 8 级</span><br><span class="hljs-comment"># 0: emerg</span><br><span class="hljs-comment"># 1: alert</span><br><span class="hljs-comment"># 2: crit</span><br><span class="hljs-comment"># 3: err</span><br><span class="hljs-comment"># 4: warning</span><br><span class="hljs-comment"># 5: notice</span><br><span class="hljs-comment"># 6: info</span><br><span class="hljs-comment"># 7: debug</span><br>sudo journalctl -p err -b<br>sudo journalctl --no-pager                              <span class="hljs-comment"># 日志默认分页输出，--no-pager 改为正常的标准输出</span><br>sudo journalctl -b -u nginx.service -o json             <span class="hljs-comment"># 以 JSON 格式（单行）输出</span><br>sudo journalctl -b -u nginx.serviceqq -o json-pretty    <span class="hljs-comment"># 以 JSON 格式（多行）输出，可读性更好</span><br>sudo journalctl --disk-usage                            <span class="hljs-comment"># 显示日志占据的硬盘空间</span><br>sudo journalctl --vacuum-size=1G                        <span class="hljs-comment"># 指定日志文件占据的最大空间</span><br>sudo journalctl --vacuum-time=1years                    <span class="hljs-comment"># 指定日志文件保存多久</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="8-参考文献"><a href="#8-参考文献" class="headerlink" title="8 参考文献"></a>8 参考文献</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://wiki.debian.org/Debate/initsystem/systemd">debian.org</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.freedesktop.org/wiki/Software/systemd/">freedesktop.org</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html">Systemd 入门教程</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/linux/" class="category-chain-item">linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Systemd</div>
+      <div>https://laplac2.github.io/linux/systemd/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Laplace</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年12月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/tools/gtest/" title="Google Test">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Google Test</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/linux/mirrors/" title="Mirrors">
+                        <span class="hidden-mobile">Mirrors</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

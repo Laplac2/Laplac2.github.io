@@ -1,0 +1,795 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Laplace">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1 基本特性 关键字 构造函数 析构函数 运算符 指针与引用 The C++ Standard Template Library  2 类型转换语法形式：类型说明符 (表达式)(类型说明符) 表达式类型操作符&lt;类型说明符&gt;(表达式) —— C++ 特有形式 类型操作符可以是：const_cast、dynamic_cast、static_cast例：int(z)、(int)z、stati">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++">
+<meta property="og:url" content="https://laplac2.github.io/cpp/cpp/index.html">
+<meta property="og:site_name" content="Laplace&#39;s blog">
+<meta property="og:description" content="1 基本特性 关键字 构造函数 析构函数 运算符 指针与引用 The C++ Standard Template Library  2 类型转换语法形式：类型说明符 (表达式)(类型说明符) 表达式类型操作符&lt;类型说明符&gt;(表达式) —— C++ 特有形式 类型操作符可以是：const_cast、dynamic_cast、static_cast例：int(z)、(int)z、stati">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/library-operators.png">
+<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/derived-class-member.png">
+<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/derived-class-access-properties-1.png">
+<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/derived-class-access-properties-2.png">
+<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/example1-constructor.png">
+<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/example2-constructor.png">
+<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/example3-constructor.png">
+<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/example4-constructor.png">
+<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/example5-constructor.png">
+<meta property="article:published_time" content="2022-03-18T08:46:00.000Z">
+<meta property="article:modified_time" content="2024-01-16T16:09:24.238Z">
+<meta property="article:author" content="Laplace">
+<meta property="article:tag" content="CPP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laplac2.github.io/cpp/cpp/images/library-operators.png">
+  
+  
+  
+  <title>C++ - Laplace&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"laplac2.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Laplace&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/0.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C++"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-18 16:46" pubdate>
+          2022年3月18日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">C++</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-基本特性"><a href="#1-基本特性" class="headerlink" title="1 基本特性"></a>1 基本特性</h2><ul>
+<li><a href="keywords.md">关键字</a></li>
+<li><a href="constructor.md">构造函数</a></li>
+<li><a href="destructor.md">析构函数</a></li>
+<li><a href="operator.md">运算符</a></li>
+<li><a href="%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8.md">指针与引用</a></li>
+<li><a href="stl.md">The C++ Standard Template Library</a></li>
+</ul>
+<h2 id="2-类型转换"><a href="#2-类型转换" class="headerlink" title="2 类型转换"></a>2 类型转换</h2><p>语法形式：<br>类型说明符 (表达式)<br>(类型说明符) 表达式<br>类型操作符&lt;类型说明符&gt;(表达式) —— C++ 特有形式</p>
+<p>类型操作符可以是：<br>const_cast、dynamic_cast、static_cast<br>例：<code>int(z)</code>、<code>(int)z</code>、<code>static_cast&lt;int&gt;(z)</code> 三种完全等价。</p>
+<h2 id="3-常用的-I-O-流类库操作符"><a href="#3-常用的-I-O-流类库操作符" class="headerlink" title="3 常用的 I&#x2F;O 流类库操作符"></a>3 常用的 I&#x2F;O 流类库操作符</h2><p><img src="/cpp/cpp/images/library-operators.png" srcset="/img/loading.gif" lazyload alt="常用 IO 流类库操作符"></p>
+<h2 id="4-基类与派生类"><a href="#4-基类与派生类" class="headerlink" title="4 基类与派生类"></a>4 基类与派生类</h2><ul>
+<li><p>单个类中的访问权限：</p>
+<ul>
+<li>public（公有成员）：在类的内部和外部都可以直接访问；</li>
+<li>protect（保护成员）：在本类的内部和派生类的内部可以直接访问，外部均不可以直接访问，外部只能通过成员函数或友元函数进行访问；</li>
+<li>private（私有成员）：在类的内部可以直接访问，外部不可以直接访问，外部只能通过成员函数或友元函数进行访问。</li>
+</ul>
+</li>
+<li><p>继承方式：</p>
+<ul>
+<li>public：基类中的成员访问权限在派生类中不变；</li>
+<li>protect：基类中的 public 成员在派生类中变为 protect 成员，其它不变；</li>
+<li>private：基类中的所有成员在派生类中均变为 private 成员。</li>
+</ul>
+</li>
+<li><p>派生类的构成</p>
+<ul>
+<li>派生类拥有基类所有的数据成员和成员函数；</li>
+<li>派生类可以拥有基类没有的数据成员和成员函数；</li>
+<li>可以通过访问说明符控制成员的访问权限；</li>
+<li>派生类是一种特殊的基类， 可以将派生类对象当作父类对象使用；</li>
+<li>友元函数不能被继承， 友元函数不是成员函数。</li>
+<li>可以通过在派生类中声明同名的成员， 来实现修改基类成员功能的效果。</li>
+</ul>
+<p><img src="/cpp/cpp/images/derived-class-member.png" srcset="/img/loading.gif" lazyload alt="派生类的构成"></p>
+</li>
+<li><p>访问属性设置的原则：</p>
+<ul>
+<li>需要被外界访问的成员，设置为：public；</li>
+<li>只能在当前类中访问的成员， 设置为：private；</li>
+<li>只能在当前类和派生类中访问的成员，设置为：protected。</li>
+</ul>
+<p><img src="/cpp/cpp/images/derived-class-access-properties-1.png" srcset="/img/loading.gif" lazyload alt="派生类的访问控制"></p>
+<p><img src="/cpp/cpp/images/derived-class-access-properties-2.png" srcset="/img/loading.gif" lazyload alt="派生类的访问控制"></p>
+</li>
+</ul>
+<h2 id="5-构造函数和析构函数"><a href="#5-构造函数和析构函数" class="headerlink" title="5 构造函数和析构函数"></a>5 构造函数和析构函数</h2><p>在我们创建新的对象的时候，都要执行某一个类中的构造函数，而当调用构造函数分配了资源之后，当我们销毁一个对象的时候需要一个相应的操作将这些资源释放出去，这就需要析构函数。一般来说，在有基类和派生类存在时，在创建派生类类型时，会先构造基类，再构造派生类，析构顺序反之，类似于进栈出栈的过程。</p>
+<p>指针不会调用构造和析构函数：</p>
+<p><img src="/cpp/cpp/images/example1-constructor.png" srcset="/img/loading.gif" lazyload alt="example1-constructor"></p>
+<p>当对指针用 new 在内存中开辟空间的时候会调用构造函数：</p>
+<p><img src="/cpp/cpp/images/example2-constructor.png" srcset="/img/loading.gif" lazyload alt="example2-constructor"></p>
+<p>当我们使用 new 为指针开辟空间，然后用 delete 释放掉空间会调用构造和析构函数：</p>
+<p><img src="/cpp/cpp/images/example3-constructor.png" srcset="/img/loading.gif" lazyload alt="example3-constructor"></p>
+<p>当我们函数的形参是一个对象的时候，这时候会系统只会调用析构函数，而缺少形参的构造函数：</p>
+<p><img src="/cpp/cpp/images/example4-constructor.png" srcset="/img/loading.gif" lazyload alt="example4-constructor"></p>
+<p>当形参为一个对象的时候，实参也为对象，这时候系统会将实参复制一份给形参，此时系统就不会再给形参额外调用构造函数来对形参对象初始化了，所以就不会调用构造函数，但是形参被销毁的时候还是会调用析构函数！</p>
+<p>当我们函数的形参是一个引用的时候，这时候会系统不调用构造函数和析构函数：</p>
+<p><img src="/cpp/cpp/images/example5-constructor.png" srcset="/img/loading.gif" lazyload alt="example5-constructor"></p>
+<p>当形参为一个引用的时候，实参也对象，这时候系统会将形参指向实参，此时系统就不会对形参调用构造函数和析构函数！</p>
+<p>构造函数存在的目的就是为了给对象在内存中开辟空间并且给对象设置一些初始值，而析构函数就是将某个对象从内存中抹除，而设置的，经典的例子就是上边的指针的例子。</p>
+<h2 id="6-设计模式"><a href="#6-设计模式" class="headerlink" title="6 设计模式"></a>6 设计模式</h2><ul>
+<li><a href="singleton.md">单例模式</a></li>
+<li><a href="mvc.md">MVC 模式</a></li>
+</ul>
+<h2 id="7-应用"><a href="#7-应用" class="headerlink" title="7 应用"></a>7 应用</h2><p><a href="timer.md">三种计时方法</a></p>
+<h2 id="8-参考文献"><a href="#8-参考文献" class="headerlink" title="8 参考文献"></a>8 参考文献</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cplusplus.com/">cplusplus.com</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.cppreference.com/">cppreference.com</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39345003/article/details/81276968?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.edu_weight&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.edu_weight">const 的用法</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wjf1997/article/details/83041666">C++ 何时调用构造函数，何时调用析构函数</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaokunzhang/article/details/80997274">派生类的定义、构成及访问控制</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/tianzeng/p/9775672.html">c++ 中重载，重写，覆盖</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/hanxv_1987/article/details/79521102">C\C++获取系统中CPU核数</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/cpp/" class="category-chain-item">cpp</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CPP/" class="print-no-link">#CPP</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C++</div>
+      <div>https://laplac2.github.io/cpp/cpp/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Laplace</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/cpp/constructor/" title="C++ Constructor">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++ Constructor</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/cpp/destructor/" title="C++ Destructor">
+                        <span class="hidden-mobile">C++ Destructor</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
