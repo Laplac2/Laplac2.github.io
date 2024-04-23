@@ -16,32 +16,22 @@
   <meta name="author" content="Laplace">
   <meta name="keywords" content="">
   
-    <meta name="description" content="1 基本特性 关键字 构造函数 析构函数 运算符 指针与引用 The C++ Standard Template Library  2 类型转换语法形式：类型说明符 (表达式)(类型说明符) 表达式类型操作符&lt;类型说明符&gt;(表达式) —— C++ 特有形式 类型操作符可以是：const_cast、dynamic_cast、static_cast例：int(z)、(int)z、stati">
+    <meta name="description" content="VS Code + PlantUML 环境配置 安装 graphviz 安装 JDK，配置 JAVA 环境，安装好 JDK 后，记得添加环境变量； 在 VS Code 中新建以.plantuml为文件名后缀的文件，语法见官网说明文档。  1sudo apt install graphviz openjdk-11-jdk  Reference 使用 Sublime + PlantUML 高效地画图">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++">
-<meta property="og:url" content="https://laplac2.github.io/cpp/cpp/index.html">
+<meta property="og:title" content="PlantUML">
+<meta property="og:url" content="https://laplac2.github.io/tools/plantuml/index.html">
 <meta property="og:site_name" content="Laplace&#39;s blog">
-<meta property="og:description" content="1 基本特性 关键字 构造函数 析构函数 运算符 指针与引用 The C++ Standard Template Library  2 类型转换语法形式：类型说明符 (表达式)(类型说明符) 表达式类型操作符&lt;类型说明符&gt;(表达式) —— C++ 特有形式 类型操作符可以是：const_cast、dynamic_cast、static_cast例：int(z)、(int)z、stati">
+<meta property="og:description" content="VS Code + PlantUML 环境配置 安装 graphviz 安装 JDK，配置 JAVA 环境，安装好 JDK 后，记得添加环境变量； 在 VS Code 中新建以.plantuml为文件名后缀的文件，语法见官网说明文档。  1sudo apt install graphviz openjdk-11-jdk  Reference 使用 Sublime + PlantUML 高效地画图">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/library-operators.png">
-<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/derived-class-member.png">
-<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/derived-class-access-properties-1.png">
-<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/derived-class-access-properties-2.png">
-<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/example1-constructor.png">
-<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/example2-constructor.png">
-<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/example3-constructor.png">
-<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/example4-constructor.png">
-<meta property="og:image" content="https://laplac2.github.io/cpp/cpp/images/example5-constructor.png">
-<meta property="article:published_time" content="2022-03-18T08:46:00.000Z">
-<meta property="article:modified_time" content="2024-01-16T16:09:24.238Z">
+<meta property="article:published_time" content="2023-03-12T14:42:00.000Z">
+<meta property="article:modified_time" content="2024-04-23T14:43:25.147Z">
 <meta property="article:author" content="Laplace">
-<meta property="article:tag" content="CPP">
+<meta property="article:tag" content="Tool">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://laplac2.github.io/cpp/cpp/images/library-operators.png">
   
   
   
-  <title>C++ - Laplace&#39;s blog</title>
+  <title>PlantUML - Laplace&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -223,7 +213,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="C++"></span>
+            <span id="subtitle" data-typed-text="PlantUML"></span>
           
         </div>
 
@@ -234,8 +224,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-03-18 16:46" pubdate>
-          2022年3月18日 下午
+        <time datetime="2023-03-12 22:42" pubdate>
+          2023年3月12日 晚上
         </time>
       </span>
     
@@ -246,7 +236,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          70 字
         
       </span>
     
@@ -257,7 +247,7 @@
         
         
         
-          9 分钟
+          1 分钟
         
       </span>
     
@@ -294,85 +284,21 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">C++</h1>
+            <h1 id="seo-header">PlantUML</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="1-基本特性"><a href="#1-基本特性" class="headerlink" title="1 基本特性"></a>1 基本特性</h2><ul>
-<li><a href="keywords.md">关键字</a></li>
-<li><a href="constructor.md">构造函数</a></li>
-<li><a href="destructor.md">析构函数</a></li>
-<li><a href="operator.md">运算符</a></li>
-<li><a href="%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8.md">指针与引用</a></li>
-<li><a href="stl.md">The C++ Standard Template Library</a></li>
-</ul>
-<h2 id="2-类型转换"><a href="#2-类型转换" class="headerlink" title="2 类型转换"></a>2 类型转换</h2><p>语法形式：<br>类型说明符 (表达式)<br>(类型说明符) 表达式<br>类型操作符&lt;类型说明符&gt;(表达式) —— C++ 特有形式</p>
-<p>类型操作符可以是：<br>const_cast、dynamic_cast、static_cast<br>例：<code>int(z)</code>、<code>(int)z</code>、<code>static_cast&lt;int&gt;(z)</code> 三种完全等价。</p>
-<h2 id="3-常用的-I-O-流类库操作符"><a href="#3-常用的-I-O-流类库操作符" class="headerlink" title="3 常用的 I&#x2F;O 流类库操作符"></a>3 常用的 I&#x2F;O 流类库操作符</h2><p><img src="/cpp/cpp/images/library-operators.png" srcset="/img/loading.gif" lazyload alt="常用 IO 流类库操作符"></p>
-<h2 id="4-基类与派生类"><a href="#4-基类与派生类" class="headerlink" title="4 基类与派生类"></a>4 基类与派生类</h2><ul>
-<li><p>单个类中的访问权限：</p>
-<ul>
-<li>public（公有成员）：在类的内部和外部都可以直接访问；</li>
-<li>protect（保护成员）：在本类的内部和派生类的内部可以直接访问，外部均不可以直接访问，外部只能通过成员函数或友元函数进行访问；</li>
-<li>private（私有成员）：在类的内部可以直接访问，外部不可以直接访问，外部只能通过成员函数或友元函数进行访问。</li>
-</ul>
-</li>
-<li><p>继承方式：</p>
-<ul>
-<li>public：基类中的成员访问权限在派生类中不变；</li>
-<li>protect：基类中的 public 成员在派生类中变为 protect 成员，其它不变；</li>
-<li>private：基类中的所有成员在派生类中均变为 private 成员。</li>
-</ul>
-</li>
-<li><p>派生类的构成</p>
-<ul>
-<li>派生类拥有基类所有的数据成员和成员函数；</li>
-<li>派生类可以拥有基类没有的数据成员和成员函数；</li>
-<li>可以通过访问说明符控制成员的访问权限；</li>
-<li>派生类是一种特殊的基类， 可以将派生类对象当作父类对象使用；</li>
-<li>友元函数不能被继承， 友元函数不是成员函数。</li>
-<li>可以通过在派生类中声明同名的成员， 来实现修改基类成员功能的效果。</li>
-</ul>
-<p><img src="/cpp/cpp/images/derived-class-member.png" srcset="/img/loading.gif" lazyload alt="派生类的构成"></p>
-</li>
-<li><p>访问属性设置的原则：</p>
-<ul>
-<li>需要被外界访问的成员，设置为：public；</li>
-<li>只能在当前类中访问的成员， 设置为：private；</li>
-<li>只能在当前类和派生类中访问的成员，设置为：protected。</li>
-</ul>
-<p><img src="/cpp/cpp/images/derived-class-access-properties-1.png" srcset="/img/loading.gif" lazyload alt="派生类的访问控制"></p>
-<p><img src="/cpp/cpp/images/derived-class-access-properties-2.png" srcset="/img/loading.gif" lazyload alt="派生类的访问控制"></p>
-</li>
-</ul>
-<h2 id="5-构造函数和析构函数"><a href="#5-构造函数和析构函数" class="headerlink" title="5 构造函数和析构函数"></a>5 构造函数和析构函数</h2><p>在我们创建新的对象的时候，都要执行某一个类中的构造函数，而当调用构造函数分配了资源之后，当我们销毁一个对象的时候需要一个相应的操作将这些资源释放出去，这就需要析构函数。一般来说，在有基类和派生类存在时，在创建派生类类型时，会先构造基类，再构造派生类，析构顺序反之，类似于进栈出栈的过程。</p>
-<p>指针不会调用构造和析构函数：</p>
-<p><img src="/cpp/cpp/images/example1-constructor.png" srcset="/img/loading.gif" lazyload alt="example1-constructor"></p>
-<p>当对指针用 new 在内存中开辟空间的时候会调用构造函数：</p>
-<p><img src="/cpp/cpp/images/example2-constructor.png" srcset="/img/loading.gif" lazyload alt="example2-constructor"></p>
-<p>当我们使用 new 为指针开辟空间，然后用 delete 释放掉空间会调用构造和析构函数：</p>
-<p><img src="/cpp/cpp/images/example3-constructor.png" srcset="/img/loading.gif" lazyload alt="example3-constructor"></p>
-<p>当我们函数的形参是一个对象的时候，这时候会系统只会调用析构函数，而缺少形参的构造函数：</p>
-<p><img src="/cpp/cpp/images/example4-constructor.png" srcset="/img/loading.gif" lazyload alt="example4-constructor"></p>
-<p>当形参为一个对象的时候，实参也为对象，这时候系统会将实参复制一份给形参，此时系统就不会再给形参额外调用构造函数来对形参对象初始化了，所以就不会调用构造函数，但是形参被销毁的时候还是会调用析构函数！</p>
-<p>当我们函数的形参是一个引用的时候，这时候会系统不调用构造函数和析构函数：</p>
-<p><img src="/cpp/cpp/images/example5-constructor.png" srcset="/img/loading.gif" lazyload alt="example5-constructor"></p>
-<p>当形参为一个引用的时候，实参也对象，这时候系统会将形参指向实参，此时系统就不会对形参调用构造函数和析构函数！</p>
-<p>构造函数存在的目的就是为了给对象在内存中开辟空间并且给对象设置一些初始值，而析构函数就是将某个对象从内存中抹除，而设置的，经典的例子就是上边的指针的例子。</p>
-<h2 id="6-设计模式"><a href="#6-设计模式" class="headerlink" title="6 设计模式"></a>6 设计模式</h2><ul>
-<li><a href="singleton.md">单例模式</a></li>
-<li><a href="mvc.md">MVC 模式</a></li>
-</ul>
-<h2 id="7-应用"><a href="#7-应用" class="headerlink" title="7 应用"></a>7 应用</h2><p><a href="timer.md">三种计时方法</a></p>
-<h2 id="8-参考文献"><a href="#8-参考文献" class="headerlink" title="8 参考文献"></a>8 参考文献</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://cplusplus.com/">cplusplus.com</a></li>
-<li><a target="_blank" rel="noopener" href="https://zh.cppreference.com/">cppreference.com</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39345003/article/details/81276968?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.edu_weight&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.edu_weight">const 的用法</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wjf1997/article/details/83041666">C++ 何时调用构造函数，何时调用析构函数</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaokunzhang/article/details/80997274">派生类的定义、构成及访问控制</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/tianzeng/p/9775672.html">c++ 中重载，重写，覆盖</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/hanxv_1987/article/details/79521102">C\C++获取系统中CPU核数</a></li>
+                <h2 id="VS-Code-PlantUML-环境配置"><a href="#VS-Code-PlantUML-环境配置" class="headerlink" title="VS Code + PlantUML 环境配置"></a>VS Code + PlantUML 环境配置</h2><ol>
+<li>安装 <a target="_blank" rel="noopener" href="http://graphviz.org/">graphviz</a></li>
+<li>安装 <a target="_blank" rel="noopener" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>，配置 JAVA 环境，安装好 JDK 后，记得添加环境变量；</li>
+<li>在 VS Code 中新建以<code>.plantuml</code>为文件名后缀的文件，语法见官网说明文档。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt install graphviz openjdk-11-jdk<br></code></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e92a52770832">使用 Sublime + PlantUML 高效地画图</a></li>
+<li><a target="_blank" rel="noopener" href="http://plantuml.com/zh/index">官方 PlantUML 说明文档</a></li>
 </ul>
 
                 
@@ -392,7 +318,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/cpp/" class="category-chain-item">cpp</a>
+  <a href="/categories/tools/" class="category-chain-item">tools</a>
   
   
 
@@ -407,7 +333,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/CPP/" class="print-no-link">#CPP</a>
+        <a href="/tags/Tool/" class="print-no-link">#Tool</a>
       
     </div>
   
@@ -419,8 +345,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>C++</div>
-      <div>https://laplac2.github.io/cpp/cpp/</div>
+      <div>PlantUML</div>
+      <div>https://laplac2.github.io/tools/plantuml/</div>
     </div>
     <div class="license-meta">
       
@@ -432,7 +358,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年3月18日</div>
+          <div>2023年3月12日</div>
         </div>
       
       
@@ -464,9 +390,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/tools/crontab/" title="crontab">
+                      <a href="/design-pattern/observer/" title="Observer Pattern">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">crontab</span>
+                        <span class="hidden-mobile">Observer Pattern</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -474,8 +400,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/cpp/constructor/" title="C++ Constructor">
-                        <span class="hidden-mobile">C++ Constructor</span>
+                      <a href="/tools/tar/" title="tar">
+                        <span class="hidden-mobile">tar</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
