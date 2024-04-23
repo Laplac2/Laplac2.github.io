@@ -16,23 +16,22 @@
   <meta name="author" content="Laplace">
   <meta name="keywords" content="">
   
-    <meta name="description" content="公众号与订阅者之间的关系，一对多。 123456789101112131415161718192021222324&#x2F;&#x2F; Observerclass Observer&amp;#123;public:    Observer() &#x3D; default;    virtual ~Observer() &#x3D; default;    virtual void update(const char *msg) &#x3D; 0;&amp;">
+    <meta name="description" content="安装1sudo apt install google-perftools libgoogle-perftools-dev  使用#include &lt;gperftools&#x2F;profiler.h&gt;-lprofiler 123456789#include &lt;gperftools&#x2F;profiler.h&gt;int fun()&amp;#123;    ProfilerStart(&quot;x">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Observer Pattern">
-<meta property="og:url" content="https://laplac2.github.io/design-pattern/observer/index.html">
+<meta property="og:title" content="Google Performance Tools">
+<meta property="og:url" content="https://laplac2.github.io/tools/gperftools/index.html">
 <meta property="og:site_name" content="Laplace&#39;s blog">
-<meta property="og:description" content="公众号与订阅者之间的关系，一对多。 123456789101112131415161718192021222324&#x2F;&#x2F; Observerclass Observer&amp;#123;public:    Observer() &#x3D; default;    virtual ~Observer() &#x3D; default;    virtual void update(const char *msg) &#x3D; 0;&amp;">
+<meta property="og:description" content="安装1sudo apt install google-perftools libgoogle-perftools-dev  使用#include &lt;gperftools&#x2F;profiler.h&gt;-lprofiler 123456789#include &lt;gperftools&#x2F;profiler.h&gt;int fun()&amp;#123;    ProfilerStart(&quot;x">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-12-09T08:30:00.000Z">
-<meta property="article:modified_time" content="2024-01-16T16:09:24.268Z">
+<meta property="article:published_time" content="2023-12-04T06:34:00.000Z">
+<meta property="article:modified_time" content="2024-04-23T14:57:22.969Z">
 <meta property="article:author" content="Laplace">
-<meta property="article:tag" content="CPP">
-<meta property="article:tag" content="DesignPattern">
+<meta property="article:tag" content="Tool">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Observer Pattern - Laplace&#39;s blog</title>
+  <title>Google Performance Tools - Laplace&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +213,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Observer Pattern"></span>
+            <span id="subtitle" data-typed-text="Google Performance Tools"></span>
           
         </div>
 
@@ -225,8 +224,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-12-09 16:30" pubdate>
-          2023年12月9日 下午
+        <time datetime="2023-12-04 14:34" pubdate>
+          2023年12月4日 下午
         </time>
       </span>
     
@@ -237,7 +236,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          198 字
+          130 字
         
       </span>
     
@@ -285,20 +284,27 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Observer Pattern</h1>
+            <h1 id="seo-header">Google Performance Tools</h1>
             
             
               <div class="markdown-body">
                 
-                <p>公众号与订阅者之间的关系，一对多。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// Observer</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Observer</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Observer</span>() = <span class="hljs-keyword">default</span>;<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">Observer</span>() = <span class="hljs-keyword">default</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *msg)</span> </span>= <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Subscriber</span> : <span class="hljs-keyword">public</span> Observer<br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Subscriber</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string &amp;id)</span> </span>&#123;&#125;<br>    ~<span class="hljs-built_in">Subscriber</span>() <span class="hljs-keyword">override</span> &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string &amp;msg)</span> <span class="hljs-keyword">override</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-comment">// recived a new message</span><br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    std::string m_id;<br>&#125;;<br></code></pre></td></tr></table></figure>
+                <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt install google-perftools libgoogle-perftools-dev<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// Subject</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Observer</span>;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Subject</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Subject</span>() = <span class="hljs-keyword">default</span>;<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">Subject</span>() = <span class="hljs-keyword">default</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">notify</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">registerObserver</span><span class="hljs-params">(Observer *)</span> </span>= <span class="hljs-number">0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">unregisterObserver</span><span class="hljs-params">(Observer *)</span> </span>= <span class="hljs-number">0</span>;<br>&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Service</span> : <span class="hljs-keyword">public</span> Subject<br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Service</span>() &#123;&#125;<br>    ~<span class="hljs-built_in">Service</span>() <span class="hljs-keyword">override</span> &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">notify</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">for</span> (Observer *obs : m_observers) &#123;<br>            obs-&gt;<span class="hljs-built_in">update</span>(<span class="hljs-string">&quot;Hello!&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerObserver</span><span class="hljs-params">(Observer *observer)</span> <span class="hljs-keyword">override</span></span><br><span class="hljs-function">    </span>&#123;<br>        m_observers.<span class="hljs-built_in">emplace_back</span>(observer);<br>        observer-&gt;<span class="hljs-built_in">update</span>(<span class="hljs-string">&quot;Subscribe successfully!&quot;</span>);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unregisterObserver</span><span class="hljs-params">(Observer *observer)</span> <span class="hljs-keyword">override</span></span>;<br>    &#123;<br>        m_observers.<span class="hljs-built_in">remove</span>(observer);<br>        observer-&gt;<span class="hljs-built_in">update</span>(<span class="hljs-string">&quot;Unsubscribe successfully!&quot;</span>);<br>    &#125;<br><br><span class="hljs-keyword">protected</span>:<br>    std::list&lt;Observer *&gt; m_observers;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p><code>#include &lt;gperftools/profiler.h&gt;</code><br><code>-lprofiler</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;gperftools/profiler.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">fun</span><span class="hljs-params">()</span><br>&#123;<br>    ProfilerStart(<span class="hljs-string">&quot;xxx.prof&quot;</span>);<br>    <span class="hljs-comment">// code</span><br>    ProfilerStop();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// main</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;observer.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;subject.h&quot;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span></span><br><span class="hljs-function"></span>&#123;<br>    Service service;<br>    <span class="hljs-function">Subscriber <span class="hljs-title">subscriberA</span><span class="hljs-params">(<span class="hljs-string">&quot;Subscriber A&quot;</span>)</span></span>;<br>    <span class="hljs-function">Subscriber <span class="hljs-title">subscriberB</span><span class="hljs-params">(<span class="hljs-string">&quot;Subscriber B&quot;</span>)</span></span>;<br>    <span class="hljs-function">Subscriber <span class="hljs-title">subscriberC</span><span class="hljs-params">(<span class="hljs-string">&quot;Subscriber C&quot;</span>)</span></span>;<br><br>    service.<span class="hljs-built_in">registerObserver</span>(&amp;subscriberA);<br>    service.<span class="hljs-built_in">registerObserver</span>(&amp;subscriberB);<br>    service.<span class="hljs-built_in">registerObserver</span>(&amp;subscriberC);<br>    service.<span class="hljs-built_in">notify</span>();<br><br>    service.<span class="hljs-built_in">unregisterObserver</span>(&amp;subscriberC);<br>    service.<span class="hljs-built_in">notify</span>();<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 分析结果</span><br>google-pprof --pdf xxx xxx.prof &gt; xxx.pdf<br>google-pprof --gif xxx xxx.prof &gt; xxx.gif<br>google-pprof --text xxx xxx.prof &gt; xxx.text<br></code></pre></td></tr></table></figure>
 
-<ul>
-<li><a target="_blank" rel="noopener" href="https://www.runoob.com/design-pattern/observer-pattern.html">观察者模式</a></li>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li><p>程序运行输出<code>PROFILE: interrupts/evictions/bytes = 0/0/64</code><br>这种情况可能是程序占用 CPU 太低了，导致没有分析出结果，可以写个循环验证试试。</p>
+</li>
+<li><p>执行<code>google-pprof</code>输出如下结果，原因同 1</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Using local file hotplug.</span><br><span class="hljs-comment"># Using local file test.prof.</span><br><span class="hljs-comment"># No nodes to print</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/gary-guo/p/10607514.html">gperftools 对程序进行分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://manpages.debian.org/stretch/google-perftools/google-pprof.1.en.html">debian google-pprof</a></li>
 </ul>
 
                 
@@ -318,7 +324,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/design-pattern/" class="category-chain-item">design pattern</a>
+  <a href="/categories/tools/" class="category-chain-item">tools</a>
   
   
 
@@ -333,9 +339,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/CPP/" class="print-no-link">#CPP</a>
-      
-        <a href="/tags/DesignPattern/" class="print-no-link">#DesignPattern</a>
+        <a href="/tags/Tool/" class="print-no-link">#Tool</a>
       
     </div>
   
@@ -347,8 +351,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Observer Pattern</div>
-      <div>https://laplac2.github.io/design-pattern/observer/</div>
+      <div>Google Performance Tools</div>
+      <div>https://laplac2.github.io/tools/gperftools/</div>
     </div>
     <div class="license-meta">
       
@@ -360,7 +364,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年12月9日</div>
+          <div>2023年12月4日</div>
         </div>
       
       
@@ -392,9 +396,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/design-pattern/mediator/" title="Mediator Pattern">
+                      <a href="/design-pattern/observer/" title="Observer Pattern">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Mediator Pattern</span>
+                        <span class="hidden-mobile">Observer Pattern</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -402,8 +406,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/tools/gperftools/" title="Google Performance Tools">
-                        <span class="hidden-mobile">Google Performance Tools</span>
+                      <a href="/tools/plantuml/" title="PlantUML">
+                        <span class="hidden-mobile">PlantUML</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

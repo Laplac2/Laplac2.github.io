@@ -85,6 +85,31 @@
   
   
   <entry>
+    <title>Google Performance Tools</title>
+    <link href="/tools/gperftools/"/>
+    <url>/tools/gperftools/</url>
+    
+    <content type="html"><![CDATA[<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt install google-perftools libgoogle-perftools-dev<br></code></pre></td></tr></table></figure><h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p><code>#include &lt;gperftools/profiler.h&gt;</code><br><code>-lprofiler</code></p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;gperftools/profiler.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">fun</span><span class="hljs-params">()</span><br>&#123;<br>    ProfilerStart(<span class="hljs-string">&quot;xxx.prof&quot;</span>);<br>    <span class="hljs-comment">// code</span><br>    ProfilerStop();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 分析结果</span><br>google-pprof --pdf xxx xxx.prof &gt; xxx.pdf<br>google-pprof --gif xxx xxx.prof &gt; xxx.gif<br>google-pprof --text xxx xxx.prof &gt; xxx.text<br></code></pre></td></tr></table></figure><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol><li><p>程序运行输出<code>PROFILE: interrupts/evictions/bytes = 0/0/64</code><br>这种情况可能是程序占用 CPU 太低了，导致没有分析出结果，可以写个循环验证试试。</p></li><li><p>执行<code>google-pprof</code>输出如下结果，原因同 1</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Using local file hotplug.</span><br><span class="hljs-comment"># Using local file test.prof.</span><br><span class="hljs-comment"># No nodes to print</span><br></code></pre></td></tr></table></figure></li></ol><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul><li><a href="https://www.cnblogs.com/gary-guo/p/10607514.html">gperftools 对程序进行分析</a></li><li><a href="https://manpages.debian.org/stretch/google-perftools/google-pprof.1.en.html">debian google-pprof</a></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>tools</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Tool</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>PlantUML</title>
     <link href="/tools/plantuml/"/>
     <url>/tools/plantuml/</url>
