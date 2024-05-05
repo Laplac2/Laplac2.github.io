@@ -16,23 +16,22 @@
   <meta name="author" content="Laplace">
   <meta name="keywords" content="">
   
-    <meta name="description" content="概述包管理器 1234567891011# 安装包winget install Microsoft.VisualStudioCodewinget install Git.Gitwinget install Kitware.CMakewinget install LLVM.LLVMwinget install GoLang.Go.1.19# 升级包winget upgrade --id Git.Gi">
+    <meta name="description" content="概述CUDA（Compute Unified Device Architecture，统一计算架构）是由 NVIDIA 所推出的一种集成技术，是该公司对于 GPGPU 的正式名称。通过这个技术，用户可利用 NVIDIA 的 GeForce 8 以后的 GPU 和较新的 Quadro GPU 进行计算。亦是首次可以利用 GPU 作为 C-编译器的开发环境。NVIDIA 营销的时候，往往将编译器与">
 <meta property="og:type" content="article">
-<meta property="og:title" content="winget">
-<meta property="og:url" content="https://laplac2.github.io/windows/winget/index.html">
+<meta property="og:title" content="CUDA">
+<meta property="og:url" content="https://laplac2.github.io/cuda/cuda/index.html">
 <meta property="og:site_name" content="Laplace&#39;s blog">
-<meta property="og:description" content="概述包管理器 1234567891011# 安装包winget install Microsoft.VisualStudioCodewinget install Git.Gitwinget install Kitware.CMakewinget install LLVM.LLVMwinget install GoLang.Go.1.19# 升级包winget upgrade --id Git.Gi">
+<meta property="og:description" content="概述CUDA（Compute Unified Device Architecture，统一计算架构）是由 NVIDIA 所推出的一种集成技术，是该公司对于 GPGPU 的正式名称。通过这个技术，用户可利用 NVIDIA 的 GeForce 8 以后的 GPU 和较新的 Quadro GPU 进行计算。亦是首次可以利用 GPU 作为 C-编译器的开发环境。NVIDIA 营销的时候，往往将编译器与">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-11-27T12:07:00.000Z">
-<meta property="article:modified_time" content="2024-01-16T16:09:24.281Z">
+<meta property="article:published_time" content="2022-11-13T09:54:19.000Z">
+<meta property="article:modified_time" content="2024-05-05T14:30:54.074Z">
 <meta property="article:author" content="Laplace">
-<meta property="article:tag" content="Tool">
-<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="CUDA">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>winget - Laplace&#39;s blog</title>
+  <title>CUDA - Laplace&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +213,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="winget"></span>
+            <span id="subtitle" data-typed-text="CUDA"></span>
           
         </div>
 
@@ -225,8 +224,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-11-27 20:07" pubdate>
-          2022年11月27日 晚上
+        <time datetime="2022-11-13 17:54" pubdate>
+          2022年11月13日 下午
         </time>
       </span>
     
@@ -237,7 +236,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          42 字
+          427 字
         
       </span>
     
@@ -248,7 +247,7 @@
         
         
         
-          1 分钟
+          4 分钟
         
       </span>
     
@@ -285,13 +284,57 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">winget</h1>
+            <h1 id="seo-header">CUDA</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/package-manager/winget">包管理器</a></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 安装包</span><br>winget install Microsoft.VisualStudioCode<br>winget install Git.Git<br>winget install Kitware.CMake<br>winget install LLVM.LLVM<br>winget install GoLang.Go.1.19<br><span class="hljs-comment"># 升级包</span><br>winget upgrade --<span class="hljs-built_in">id</span> Git.Git <span class="hljs-comment"># 仅升级 Git</span><br>winget upgrade --all <span class="hljs-comment"># 升级所有包</span><br><span class="hljs-comment"># 查找命令位置</span><br>where.exe git<br></code></pre></td></tr></table></figure>
+                <!--
+- [概述](#概述)
+- [应用](#应用)
+- [参考文献](#参考文献)
+-->
+
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>CUDA（Compute Unified Device Architecture，统一计算架构）是由 NVIDIA 所推出的一种集成技术，是该公司对于 GPGPU 的正式名称。通过这个技术，用户可利用 NVIDIA 的 GeForce 8 以后的 GPU 和较新的 Quadro GPU 进行计算。亦是首次可以利用 GPU 作为 C-编译器的开发环境。NVIDIA 营销的时候，往往将编译器与架构混合推广，造成混乱。实际上，CUDA 可以兼容 OpenCL 或者自家的 C-编译器。无论是 CUDA C-语言或是 OpenCL，指令最终都会被驱动程序转换成 PTX 代码，交由显示核心计算。</p>
+<p><code>__global__</code>：被称为内核函数，在 host 上被调用，在 device 上执行；只能返回 void 类型，不能作为类的成员函数；异步。<br><code>__device__</code>：只能在 device 上被调用，在 device 上执行，用于在 device 代码中内部调用。<br><code>__host__</code>：只能在 host 上被调用，在 host 上执行，也就是 host 上的函数，可以省略。</p>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>called</th>
+<th>work</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>__global__ void kernel_fun()</code></td>
+<td>host</td>
+<td>device</td>
+</tr>
+<tr>
+<td><code>__device__ float device_fun()</code></td>
+<td>device</td>
+<td>device</td>
+</tr>
+<tr>
+<td><code>__host__ float host_fun()</code></td>
+<td>host</td>
+<td>host</td>
+</tr>
+</tbody></table>
+<p>Streaming Multiprocessors, SM, 流式多处理器</p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p><code>sudo apt install nvidia-cuda-toolkit nvidia-profiler nvidia-visual-profiler nvidia-cuda-doc nvidia-cuda-dev</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br>__global__ <span class="hljs-type">void</span> <span class="hljs-title function_">vector_add</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">int</span> *a, <span class="hljs-type">const</span> <span class="hljs-type">int</span> *b, <span class="hljs-type">int</span> *c)</span><br>&#123;<br>    *c = *a + *b;<br>&#125;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-type">const</span> <span class="hljs-type">int</span> a = <span class="hljs-number">2</span>, b = <span class="hljs-number">5</span>;<br>    <span class="hljs-type">int</span> c = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> *dev_a, *dev_b, *dev_c;<br>    cudaMalloc((<span class="hljs-type">void</span> **)&amp;dev_a, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>    cudaMalloc((<span class="hljs-type">void</span> **)&amp;dev_b, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>    cudaMalloc((<span class="hljs-type">void</span> **)&amp;dev_c, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>    cudaMemcpy(dev_a, &amp;a, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>), cudaMemcpyHostToDevice);<br>    cudaMemcpy(dev_b, &amp;b, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>), cudaMemcpyHostToDevice);<br>    vector_add&lt;&lt;&lt;<span class="hljs-number">1</span>, <span class="hljs-number">1</span>&gt;&gt;&gt;(dev_a, dev_b, dev_c);<br>    cudaMemcpy(&amp;c, dev_c, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>), cudaMemcpyDeviceToHost);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d + %d = %d, Is that right?\n&quot;</span>, a, b, c);<br>    cudaFree(dev_a);<br>    cudaFree(dev_b);<br>    cudaFree(dev_c);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>编译：<code>nvcc main.cu</code><br>运行：<code>./a.out</code></p>
+<p>输出结果：<code>2 + 5 = 0, Is that right?</code></p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide">CUDA C++ Programming Guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://bingliu221.gitbooks.io/learn-cuda-the-simple-way/content/chapter2.html">Cuda 简单入门教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/442508630">CUDA 编程 (目录)</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/442052342">CUDA 编程(一)：CUDA C 编程及 GPU 基本知识</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/7219216676507402297">CUDA 教程-如何用 CMake 编译 CUDA 代码</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/620194070">CUDA 教程-如何用 CMake 编译 CUDA 代码</a></li>
+</ul>
 
                 
               </div>
@@ -310,7 +353,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/windows/" class="category-chain-item">windows</a>
+  <a href="/categories/cuda/" class="category-chain-item">cuda</a>
   
   
 
@@ -325,9 +368,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Tool/" class="print-no-link">#Tool</a>
-      
-        <a href="/tags/Windows/" class="print-no-link">#Windows</a>
+        <a href="/tags/CUDA/" class="print-no-link">#CUDA</a>
       
     </div>
   
@@ -339,8 +380,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>winget</div>
-      <div>https://laplac2.github.io/windows/winget/</div>
+      <div>CUDA</div>
+      <div>https://laplac2.github.io/cuda/cuda/</div>
     </div>
     <div class="license-meta">
       
@@ -352,7 +393,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年11月27日</div>
+          <div>2022年11月13日</div>
         </div>
       
       
@@ -384,9 +425,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/macos/lipo/" title="lipo">
+                      <a href="/windows/winget/" title="winget">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">lipo</span>
+                        <span class="hidden-mobile">winget</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -394,8 +435,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/cuda/cuda/" title="CUDA">
-                        <span class="hidden-mobile">CUDA</span>
+                      <a href="/tools/shell/" title="Shell">
+                        <span class="hidden-mobile">Shell</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

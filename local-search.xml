@@ -243,6 +243,31 @@
   
   
   <entry>
+    <title>CUDA</title>
+    <link href="/cuda/cuda/"/>
+    <url>/cuda/cuda/</url>
+    
+    <content type="html"><![CDATA[<!--- [概述](#概述)- [应用](#应用)- [参考文献](#参考文献)--><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>CUDA（Compute Unified Device Architecture，统一计算架构）是由 NVIDIA 所推出的一种集成技术，是该公司对于 GPGPU 的正式名称。通过这个技术，用户可利用 NVIDIA 的 GeForce 8 以后的 GPU 和较新的 Quadro GPU 进行计算。亦是首次可以利用 GPU 作为 C-编译器的开发环境。NVIDIA 营销的时候，往往将编译器与架构混合推广，造成混乱。实际上，CUDA 可以兼容 OpenCL 或者自家的 C-编译器。无论是 CUDA C-语言或是 OpenCL，指令最终都会被驱动程序转换成 PTX 代码，交由显示核心计算。</p><p><code>__global__</code>：被称为内核函数，在 host 上被调用，在 device 上执行；只能返回 void 类型，不能作为类的成员函数；异步。<br><code>__device__</code>：只能在 device 上被调用，在 device 上执行，用于在 device 代码中内部调用。<br><code>__host__</code>：只能在 host 上被调用，在 host 上执行，也就是 host 上的函数，可以省略。</p><table><thead><tr><th>function</th><th>called</th><th>work</th></tr></thead><tbody><tr><td><code>__global__ void kernel_fun()</code></td><td>host</td><td>device</td></tr><tr><td><code>__device__ float device_fun()</code></td><td>device</td><td>device</td></tr><tr><td><code>__host__ float host_fun()</code></td><td>host</td><td>host</td></tr></tbody></table><p>Streaming Multiprocessors, SM, 流式多处理器</p><h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p><code>sudo apt install nvidia-cuda-toolkit nvidia-profiler nvidia-visual-profiler nvidia-cuda-doc nvidia-cuda-dev</code></p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br>__global__ <span class="hljs-type">void</span> <span class="hljs-title function_">vector_add</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">int</span> *a, <span class="hljs-type">const</span> <span class="hljs-type">int</span> *b, <span class="hljs-type">int</span> *c)</span><br>&#123;<br>    *c = *a + *b;<br>&#125;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-type">const</span> <span class="hljs-type">int</span> a = <span class="hljs-number">2</span>, b = <span class="hljs-number">5</span>;<br>    <span class="hljs-type">int</span> c = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> *dev_a, *dev_b, *dev_c;<br>    cudaMalloc((<span class="hljs-type">void</span> **)&amp;dev_a, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>    cudaMalloc((<span class="hljs-type">void</span> **)&amp;dev_b, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>    cudaMalloc((<span class="hljs-type">void</span> **)&amp;dev_c, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>    cudaMemcpy(dev_a, &amp;a, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>), cudaMemcpyHostToDevice);<br>    cudaMemcpy(dev_b, &amp;b, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>), cudaMemcpyHostToDevice);<br>    vector_add&lt;&lt;&lt;<span class="hljs-number">1</span>, <span class="hljs-number">1</span>&gt;&gt;&gt;(dev_a, dev_b, dev_c);<br>    cudaMemcpy(&amp;c, dev_c, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>), cudaMemcpyDeviceToHost);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d + %d = %d, Is that right?\n&quot;</span>, a, b, c);<br>    cudaFree(dev_a);<br>    cudaFree(dev_b);<br>    cudaFree(dev_c);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>编译：<code>nvcc main.cu</code><br>运行：<code>./a.out</code></p><p>输出结果：<code>2 + 5 = 0, Is that right?</code></p><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul><li><a href="https://docs.nvidia.com/cuda/cuda-c-programming-guide">CUDA C++ Programming Guide</a></li><li><a href="https://bingliu221.gitbooks.io/learn-cuda-the-simple-way/content/chapter2.html">Cuda 简单入门教程</a></li><li><a href="https://zhuanlan.zhihu.com/p/442508630">CUDA 编程 (目录)</a></li><li><a href="https://zhuanlan.zhihu.com/p/442052342">CUDA 编程(一)：CUDA C 编程及 GPU 基本知识</a></li><li><a href="https://juejin.cn/post/7219216676507402297">CUDA 教程-如何用 CMake 编译 CUDA 代码</a></li><li><a href="https://zhuanlan.zhihu.com/p/620194070">CUDA 教程-如何用 CMake 编译 CUDA 代码</a></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>cuda</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>CUDA</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Shell</title>
     <link href="/tools/shell/"/>
     <url>/tools/shell/</url>
