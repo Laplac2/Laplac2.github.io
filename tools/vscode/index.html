@@ -16,22 +16,30 @@
   <meta name="author" content="Laplace">
   <meta name="keywords" content="">
   
-    <meta name="description" content="VS Code + PlantUML 环境配置 安装 graphviz 安装 JDK，配置 JAVA 环境，安装好 JDK 后，记得添加环境变量； 在 VS Code 中新建以.plantuml为文件名后缀的文件，语法见官网说明文档。  1sudo apt install graphviz openjdk-11-jdk  Reference 使用 Sublime + PlantUML 高效地画图">
+    <meta name="description" content="简介https:&#x2F;&#x2F;code.visualstudio.com 安装配置通用下载链接： 12https:&#x2F;&#x2F;vscode.cdn.azure.cn&#x2F;stable&#x2F;&amp;#123;ID&amp;#125;&#x2F;vscode-server-linux-x64.tar.gzhttps:&#x2F;&#x2F;vscode.cdn.azure.cn&#x2F;stable&#x2F;&amp;#123;ID&amp;#125;&#x2F;VSCodeUserSetup-x64-1.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PlantUML">
-<meta property="og:url" content="https://laplac2.github.io/tools/plantuml/index.html">
+<meta property="og:title" content="Visual Studio Code">
+<meta property="og:url" content="https://laplac2.github.io/tools/vscode/index.html">
 <meta property="og:site_name" content="Laplace&#39;s blog">
-<meta property="og:description" content="VS Code + PlantUML 环境配置 安装 graphviz 安装 JDK，配置 JAVA 环境，安装好 JDK 后，记得添加环境变量； 在 VS Code 中新建以.plantuml为文件名后缀的文件，语法见官网说明文档。  1sudo apt install graphviz openjdk-11-jdk  Reference 使用 Sublime + PlantUML 高效地画图">
+<meta property="og:description" content="简介https:&#x2F;&#x2F;code.visualstudio.com 安装配置通用下载链接： 12https:&#x2F;&#x2F;vscode.cdn.azure.cn&#x2F;stable&#x2F;&amp;#123;ID&amp;#125;&#x2F;vscode-server-linux-x64.tar.gzhttps:&#x2F;&#x2F;vscode.cdn.azure.cn&#x2F;stable&#x2F;&amp;#123;ID&amp;#125;&#x2F;VSCodeUserSetup-x64-1.">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://laplac2.github.io/tools/vscode/image/47e8ae545f43e8c4d6e05e72db91dcd5.png">
+<meta property="og:image" content="https://laplac2.github.io/tools/vscode/image/7d2e48a337d68d353b3a22915674a257.png">
+<meta property="og:image" content="https://laplac2.github.io/tools/vscode/image/af5863e550d02cd10598bcd33fade940.png">
+<meta property="og:image" content="https://laplac2.github.io/tools/vscode/image/e29a3b79ba302a084379449b8c11f21c.png">
+<meta property="og:image" content="https://laplac2.github.io/tools/vscode/image/9b8eb991e15371852f85c9b0c7dcb821.png">
+<meta property="og:image" content="https://laplac2.github.io/tools/vscode/image/528ba421f378905e123f62914eba5704.png">
+<meta property="og:image" content="https://laplac2.github.io/tools/vscode/image/2be64f93e2fb568f6836bec2b4122135.png">
 <meta property="article:published_time" content="2023-03-12T14:42:00.000Z">
-<meta property="article:modified_time" content="2024-04-23T14:43:25.147Z">
+<meta property="article:modified_time" content="2024-06-01T07:38:48.434Z">
 <meta property="article:author" content="Laplace">
 <meta property="article:tag" content="Tool">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laplac2.github.io/tools/vscode/image/47e8ae545f43e8c4d6e05e72db91dcd5.png">
   
   
   
-  <title>PlantUML - Laplace&#39;s blog</title>
+  <title>Visual Studio Code - Laplace&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -213,7 +221,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="PlantUML"></span>
+            <span id="subtitle" data-typed-text="Visual Studio Code"></span>
           
         </div>
 
@@ -236,7 +244,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          70 字
+          857 字
         
       </span>
     
@@ -247,7 +255,7 @@
         
         
         
-          1 分钟
+          8 分钟
         
       </span>
     
@@ -284,21 +292,58 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">PlantUML</h1>
+            <h1 id="seo-header">Visual Studio Code</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="VS-Code-PlantUML-环境配置"><a href="#VS-Code-PlantUML-环境配置" class="headerlink" title="VS Code + PlantUML 环境配置"></a>VS Code + PlantUML 环境配置</h2><ol>
-<li>安装 <a target="_blank" rel="noopener" href="http://graphviz.org/">graphviz</a></li>
-<li>安装 <a target="_blank" rel="noopener" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK</a>，配置 JAVA 环境，安装好 JDK 后，记得添加环境变量；</li>
-<li>在 VS Code 中新建以<code>.plantuml</code>为文件名后缀的文件，语法见官网说明文档。</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt install graphviz openjdk-11-jdk<br></code></pre></td></tr></table></figure>
+                <!--
+- [简介](#简介)
+- [安装配置](#安装配置)
+- [编译调试](#编译调试)
+- [使用 SSH 进行远程开发](#使用-ssh-进行远程开发)
+- [参考文献](#参考文献)
+-->
 
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e92a52770832">使用 Sublime + PlantUML 高效地画图</a></li>
-<li><a target="_blank" rel="noopener" href="http://plantuml.com/zh/index">官方 PlantUML 说明文档</a></li>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a target="_blank" rel="noopener" href="https://code.visualstudio.com/">https://code.visualstudio.com</a></p>
+<h2 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h2><p>通用下载链接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">https://vscode.cdn.azure.cn/stable/&#123;ID&#125;/vscode-server-linux-x64.tar.gz<br>https://vscode.cdn.azure.cn/stable/&#123;ID&#125;/VSCodeUserSetup-x64-1.65.2.exe<br></code></pre></td></tr></table></figure>
+
+<p>找到下载链接：<code>ps aux | grep wget</code><br>可以看到：<code>wget --tries=0 --connect-timeout=7 --dns-timeout=7 --show-progress -nv -O vscode-server.tar.gz   http://update.code.visualstudio.com/commit:b3318bc0524af3d74034b8bb8a64df0ccf35549a/server-linux-x64/stable</code></p>
+<p>找到真正的下载地址，主要是找到 commit id</p>
+<p><code>wget --tries=0 --connect-timeout=7 --dns-timeout=7 --show-progress -O vscode-server.tar.gz   http://update.code.visualstudio.com/commit:b3318bc0524af3d74034b8bb8a64df0ccf35549a/server-linux-x64/stable</code></p>
+<p>URL transformed to HTTPS due to an HSTS policy<br>–2021-11-08 15:57:26– <a target="_blank" rel="noopener" href="https://update.code.visualstudio.com/commit:b3318bc0524af3d74034b8bb8a64df0ccf35549a/server-linux-x64/stable">https://update.code.visualstudio.com/commit:b3318bc0524af3d74034b8bb8a64df0ccf35549a/server-linux-x64/stable</a><br>Resolving update.code.visualstudio.com (update.code.visualstudio.com)… 20.43.132.130<br>Connecting to update.code.visualstudio.com (update.code.visualstudio.com)|20.43.132.130|:443… connected.<br>HTTP request sent, awaiting response… 302 Found<br>Location: <a target="_blank" rel="noopener" href="https://az764295.vo.msecnd.net/stable/b3318bc0524af3d74034b8bb8a64df0ccf35549a/vscode-server-linux-x64.tar.gz">https://az764295.vo.msecnd.net/stable/b3318bc0524af3d74034b8bb8a64df0ccf35549a/vscode-server-linux-x64.tar.gz</a> [following]<br>–2021-11-08 15:57:26– <a target="_blank" rel="noopener" href="https://az764295.vo.msecnd.net/stable/b3318bc0524af3d74034b8bb8a64df0ccf35549a/vscode-server-linux-x64.tar.gz">https://az764295.vo.msecnd.net/stable/b3318bc0524af3d74034b8bb8a64df0ccf35549a/vscode-server-linux-x64.tar.gz</a><br>Resolving az764295.vo.msecnd.net (az764295.vo.msecnd.net)… 117.18.232.200<br>Connecting to az764295.vo.msecnd.net (az764295.vo.msecnd.net)|117.18.232.200|:443… connected.<br>HTTP request sent, awaiting response… 200 OK<br>Length: 53650674 (51M) [application&#x2F;gzip]<br>Saving to: ‘vscode-server.tar.gz’</p>
+<p>使用 vscode.cdn.azure.cn 取代 az764295.vo.msecnd.net</p>
+<p>将下载的文件放入<code>~/.vscode-server/bin/b3318bc0524af3d74034b8bb8a64df0ccf35549a</code></p>
+<p>解压<code>tar xf vscode-server.tar.gz</code></p>
+<p>移动一级目录到上层<code>mv vscode-server-linux-x64/* .</code></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/liuck/article/details/121210043">国内镜像快速下载 vscode server</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/sinat_23318385/article/details/126268891">服务器手动安装 vscode server</a></li>
+</ul>
+<h2 id="编译调试"><a href="#编译调试" class="headerlink" title="编译调试"></a>编译调试</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-comment">// settings.json</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;cmake.configureEnvironment&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;CMAKE_PREFIX_PATH&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;C:/Qt/6.6.2/msvc2019_64&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;cmake.debugConfig&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;-i&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;a&quot;</span><span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-comment">// launch.json</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-comment">// 使用 IntelliSense 了解相关属性。</span><br>  <span class="hljs-comment">// 悬停以查看现有属性的描述。</span><br>  <span class="hljs-comment">// 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387</span><br>  <span class="hljs-attr">&quot;version&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;0.2.0&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;configurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;(gdb) Launch&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cppdbg&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;request&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;launch&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;program&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;$&#123;workspaceFolder&#125;/aaa&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;-i&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;a&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;stopAtEntry&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;cwd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;$&#123;fileDirname&#125;&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;environment&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;externalConsole&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;MIMode&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;gdb&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;setupCommands&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;为 gdb 启用整齐打印&quot;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;text&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;-enable-pretty-printing&quot;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;ignoreFailures&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><br>        <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;将反汇编风格设置为 Intel&quot;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;text&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;-gdb-set disassembly-flavor intel&quot;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;ignoreFailures&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;sourceFileMap&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;$&#123;workspace&#125;/bbb&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;.&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;$&#123;workspace&#125;/ccc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;.&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;coreDumpPath&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-comment">// tasks.json</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="使用-SSH-进行远程开发"><a href="#使用-SSH-进行远程开发" class="headerlink" title="使用 SSH 进行远程开发"></a>使用 SSH 进行远程开发</h2><p>Visual Studio Code 通过远程开发插件可以将 container，远程计算机或 Windows Linux 子系统（WSL）用作完整的开发环境。</p>
+<p><img src="/tools/vscode/image/47e8ae545f43e8c4d6e05e72db91dcd5.png" srcset="/img/loading.gif" lazyload alt="arch"></p>
+<p>首先安装插件：</p>
+<p><img src="/tools/vscode/image/7d2e48a337d68d353b3a22915674a257.png" srcset="/img/loading.gif" lazyload alt="extensions-remote"></p>
+<p>在 VS Code 中，从命令面板（F1）中选择“ Remote-SSH：Connect to Host … ”，在窗口中运行以下命令并适当替换“ user@hostname ”来验证您可以连接到 SSH 主机：</p>
+<p><img src="/tools/vscode/image/af5863e550d02cd10598bcd33fade940.png" srcset="/img/loading.gif" lazyload alt="Illustration of user@host input box"></p>
+<p>如果 VS Code 无法自动检测到要连接的服务器的类型，就需要手动选择类型：</p>
+<p><img src="/tools/vscode/image/e29a3b79ba302a084379449b8c11f21c.png" srcset="/img/loading.gif" lazyload alt="Illustration of platform selection"></p>
+<p>选择平台后，它将被存储在 remote.SSH.remotePlatform 属性下的 VSCode 设置中，因此你可以随时更改它。<br>稍后，VS Code 将连接到 SSH 服务器并进行自我设置。VS Code 将使用进度通知显示最新状态，并且可以在 Remote-SSH 输出通道中查看详细的日志。<br>你可以打开远程机器上的任何文件夹或工作区通过“ File &gt; Open… or File &gt; Open Workspace… ”，就像在本地打开一样。</p>
+<p><img src="/tools/vscode/image/9b8eb991e15371852f85c9b0c7dcb821.png" srcset="/img/loading.gif" lazyload alt="File Open on a remote SSH host"></p>
+<p><img src="/tools/vscode/image/528ba421f378905e123f62914eba5704.png" srcset="/img/loading.gif" lazyload alt="extensions-cmake"></p>
+<p><img src="/tools/vscode/image/2be64f93e2fb568f6836bec2b4122135.png" srcset="/img/loading.gif" lazyload alt="status"></p>
+<p>在扩展商店里安装 CMake 插件后，就可以直接通过点击 VSCode 状态栏中的图标编译或者调试工程。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/cpp/cpp-debug#_windows-debugging-with-gdb">Debug C++ in Visual Studio Code</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38292379/article/details/126410156">嵌入式如何使用 vscode&#x2F;gdb&#x2F;gdbserver 调试程序或 coredump(内存不足以运行 gdb 的情况下)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/zhengnianli/article/details/117538399">手把手教你使用 VSCode + gdb + gdbserver 调试 ARM 程序</a></li>
 </ul>
 
                 
@@ -345,8 +390,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>PlantUML</div>
-      <div>https://laplac2.github.io/tools/plantuml/</div>
+      <div>Visual Studio Code</div>
+      <div>https://laplac2.github.io/tools/vscode/</div>
     </div>
     <div class="license-meta">
       
@@ -390,9 +435,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/tools/gperftools/" title="Google Performance Tools">
+                      <a href="/tools/plantuml/" title="PlantUML">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Google Performance Tools</span>
+                        <span class="hidden-mobile">PlantUML</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -400,8 +445,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/tools/vscode/" title="Visual Studio Code">
-                        <span class="hidden-mobile">Visual Studio Code</span>
+                      <a href="/tools/tar/" title="tar">
+                        <span class="hidden-mobile">tar</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
